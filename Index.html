@@ -1,0 +1,43 @@
+<script>
+  // เช็คว่าเบราว์เซอร์รองรับหรือไม่
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  
+  if (!SpeechRecognition) {
+    document.getElementById('status').innerText = "เบราว์เซอร์ของคุณไม่รองรับการฟังเสียง";
+  }
+
+  function startListening() {
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'en-US';
+    
+    recognition.onstart = function() {
+        document.getElementById('status').innerText = "กำลังฟัง...";
+    };
+
+    recognition.onresult = function(event) {
+      const transcript = event.results[0][0].transcript;
+      document.getElementById('result').innerText = transcript;
+      document.getElementById('status').innerText = "เสร็จสิ้น";
+    };
+
+    recognition.onerror = function(event) {
+      // ถ้าขึ้น not-allowed ตรงนี้ แสดงว่าเป็นเรื่องของ Permission จริงๆ
+      document.getElementById('status').innerText = "เกิดข้อผิดพลาด: " + event.error;
+    };
+    
+    recognition.start();
+  }
+  
+</script>
+<script>
+  async function checkMic() {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      console.log("ไมโครโฟนพร้อมใช้งาน!");
+      stream.getTracks().forEach(track => track.stop()); // ปิดไมค์หลังจากเช็คเสร็จ
+    } catch (err) {
+      console.error("เข้าถึงไมโครโฟนไม่ได้: ", err);
+    }
+  }
+  checkMic();
+</script>
