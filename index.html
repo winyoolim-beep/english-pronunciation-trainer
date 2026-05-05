@@ -581,6 +581,7 @@ async function checkLessonLocks() {
         const response = await fetch(url, {
             method: 'POST',
             mode: 'no-cors', // เปลี่ยนกลับมาเป็น no-cors
+            redirect: 'follow',
             body: JSON.stringify({
                 action: 'getScores',
                 empId: currentUser['Employee ID']
