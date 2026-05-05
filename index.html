@@ -574,7 +574,7 @@
    */
 async function checkLessonLocks() {
     showSpinner();
-    const url = 'https://script.google.com/a/macros/mkrestaurant.com/s/AKfycbx07AVwc9d8p6vM50gecW-yyCIHmkvIudZEkM96q4jaKhZrLBa4mGNOECxXsQAwZl2Y5A/exec';
+    const url = 'https://script.google.com/macros/s/AKfycbx07AVwc9d8p6vM50gecW-yyCIHmkvIudZEkM96q4jaKhZrLBa4mGNOECxXsQAwZl2Y5A/exec';
 
     try {
         const response = await fetch(url, {
@@ -633,7 +633,7 @@ async function checkLessonLocks() {
     if (!empId) { showPopup('ผิดพลาด', 'กรุณาใส่รหัสพนักงาน'); return; }
     
     showSpinner();
-    const url = 'https://script.google.com/a/macros/mkrestaurant.com/s/AKfycbx07AVwc9d8p6vM50gecW-yyCIHmkvIudZEkM96q4jaKhZrLBa4mGNOECxXsQAwZl2Y5A/exec';
+    const url = 'https://script.google.com/macros/s/AKfycbx07AVwc9d8p6vM50gecW-yyCIHmkvIudZEkM96q4jaKhZrLBa4mGNOECxXsQAwZl2Y5A/exec';
 
     try {
         const response = await fetch(url, {
@@ -665,7 +665,7 @@ async function checkLessonLocks() {
 // =================================================================
   async function startLesson(sheetName, lessonId, lessonTitle, quizType, config = {}) {
     showSpinner();
-    const url = 'https://script.google.com/a/macros/mkrestaurant.com/s/AKfycbx07AVwc9d8p6vM50gecW-yyCIHmkvIudZEkM96q4jaKhZrLBa4mGNOECxXsQAwZl2Y5A/exec';
+    const url = 'https://script.google.com/macros/s/AKfycbx07AVwc9d8p6vM50gecW-yyCIHmkvIudZEkM96q4jaKhZrLBa4mGNOECxXsQAwZl2Y5A/exec';
 
     try {
         const response = await fetch(url, {
@@ -953,7 +953,7 @@ async function checkLessonLocks() {
 
   const saveScore = async () => {
     showSpinner();
-    const url = 'https://script.google.com/a/macros/mkrestaurant.com/s/AKfycbx07AVwc9d8p6vM50gecW-yyCIHmkvIudZEkM96q4jaKhZrLBa4mGNOECxXsQAwZl2Y5A/exec';
+    const url = 'https://script.google.com/macros/s/AKfycbx07AVwc9d8p6vM50gecW-yyCIHmkvIudZEkM96q4jaKhZrLBa4mGNOECxXsQAwZl2Y5A/exec';
     
     const scoreData = {
         'Employee ID': currentUser['Employee ID'],
@@ -998,7 +998,7 @@ async function checkLessonLocks() {
   const showScoresPage = async () => {
     navigateTo('score-page', async () => {
         showSpinner();
-        const url = 'https://script.google.com/a/macros/mkrestaurant.com/s/AKfycbx07AVwc9d8p6vM50gecW-yyCIHmkvIudZEkM96q4jaKhZrLBa4mGNOECxXsQAwZl2Y5A/exec';
+        const url = 'https://script.google.com/macros/s/AKfycbx07AVwc9d8p6vM50gecW-yyCIHmkvIudZEkM96q4jaKhZrLBa4mGNOECxXsQAwZl2Y5A/exec';
 
         try {
             const response = await fetch(url, {
