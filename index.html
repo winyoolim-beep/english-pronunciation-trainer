@@ -579,12 +579,17 @@ async function checkLessonLocks() {
     try {
         const response = await fetch(url, {
             method: 'POST',
-            mode: 'cors', // เปลี่ยนเป็น cors เพื่อให้สามารถใช้ .json() ได้
+            mode: 'no-cors', // เปลี่ยนกลับมาเป็น no-cors
             body: JSON.stringify({
                 action: 'getScores',
                 empId: currentUser['Employee ID']
             })
         });
+
+        if (response.type === 'opaque') {
+            // ถือว่าส่งข้อมูลไปถึง Google แล้ว ให้ทำหน้าเว็บต่อไปได้เลย
+            navigateTo('main-menu-page');
+        }
 
         if (!response.ok) throw new Error('Network response was not ok');
 
