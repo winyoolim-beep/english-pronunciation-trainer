@@ -593,7 +593,10 @@ async function checkLessonLocks() {
             navigateTo('main-menu-page');
         }
 
-        if (!response.ok) throw new Error('Network response was not ok');
+        if (!response.ok) {
+            const errorText = await response.text(); // ดูว่า Google ส่ง error อะไรมา
+            throw new Error('Network response not ok: ' + errorText);
+        }
 
         const scores = await response.json(); 
         hideSpinner();
