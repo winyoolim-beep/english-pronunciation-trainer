@@ -574,8 +574,7 @@
    */
 async function checkLessonLocks() {
     showSpinner();
-    const baseUrl = 'https://script.google.com/macros/s/AKfycbxo7s02cpN-FQaLSDnQCROBpEh9pTKri3vmL6Dxz99xMZ7h0GEAUqpWUu2mTZ9g_gM_VQ/exec';
-    const url = 'https://corsproxy.io/?' + encodeURIComponent(baseUrl);
+    const url = 'https://script.google.com/macros/s/AKfycbxo7s02cpN-FQaLSDnQCROBpEh9pTKri3vmL6Dxz99xMZ7h0GEAUqpWUu2mTZ9g_gM_VQ/exec';
   
     try {
         const response = await fetch(url, {
@@ -645,8 +644,7 @@ async function checkLessonLocks() {
     
     showSpinner();
   
-    const baseUrl = 'https://script.google.com/macros/s/AKfycbxo7s02cpN-FQaLSDnQCROBpEh9pTKri3vmL6Dxz99xMZ7h0GEAUqpWUu2mTZ9g_gM_VQ/exec';
-    const url = 'https://corsproxy.io/?' + encodeURIComponent(baseUrl);
+    const url = 'https://script.google.com/macros/s/AKfycbxo7s02cpN-FQaLSDnQCROBpEh9pTKri3vmL6Dxz99xMZ7h0GEAUqpWUu2mTZ9g_gM_VQ/exec';
    
     try {
         const response = await fetch(url, {
@@ -684,8 +682,7 @@ async function checkLessonLocks() {
 // =================================================================
   async function startLesson(sheetName, lessonId, lessonTitle, quizType, config = {}) {
     showSpinner();
-    const baseUrl = 'https://script.google.com/macros/s/AKfycbxo7s02cpN-FQaLSDnQCROBpEh9pTKri3vmL6Dxz99xMZ7h0GEAUqpWUu2mTZ9g_gM_VQ/exec';
-    const url = 'https://corsproxy.io/?' + encodeURIComponent(baseUrl);
+    const url = 'https://script.google.com/macros/s/AKfycbxo7s02cpN-FQaLSDnQCROBpEh9pTKri3vmL6Dxz99xMZ7h0GEAUqpWUu2mTZ9g_gM_VQ/exec';
     try {
         const response = await fetch(url, {
             method: 'POST',
@@ -972,8 +969,7 @@ async function checkLessonLocks() {
 
   const saveScore = async () => {
     showSpinner();
-    const baseUrl = 'https://script.google.com/macros/s/AKfycbxo7s02cpN-FQaLSDnQCROBpEh9pTKri3vmL6Dxz99xMZ7h0GEAUqpWUu2mTZ9g_gM_VQ/exec';
-    const url = 'https://corsproxy.io/?' + encodeURIComponent(baseUrl);
+    const url = 'https://script.google.com/macros/s/AKfycbxo7s02cpN-FQaLSDnQCROBpEh9pTKri3vmL6Dxz99xMZ7h0GEAUqpWUu2mTZ9g_gM_VQ/exec';
     const scoreData = {
         'Employee ID': currentUser['Employee ID'],
         'Title (Local)': currentUser['Title (Local)'],
@@ -1017,8 +1013,7 @@ async function checkLessonLocks() {
   const showScoresPage = async () => {
     navigateTo('score-page', async () => {
         showSpinner();
-        const baseUrl = 'https://script.google.com/macros/s/AKfycbxo7s02cpN-FQaLSDnQCROBpEh9pTKri3vmL6Dxz99xMZ7h0GEAUqpWUu2mTZ9g_gM_VQ/exec';
-        const url = 'https://corsproxy.io/?' + encodeURIComponent(baseUrl);
+        const url = 'https://script.google.com/macros/s/AKfycbxo7s02cpN-FQaLSDnQCROBpEh9pTKri3vmL6Dxz99xMZ7h0GEAUqpWUu2mTZ9g_gM_VQ/exec';
         try {
             const response = await fetch(url, {
                 method: 'POST',
