@@ -572,53 +572,60 @@
   /**
    * แก้ไข: ตรวจสอบเพียงว่ามีประวัติการทำแล้วหรือยัง (ไม่สนคะแนน) เพื่อปลดล็อกบทถัดไป
    */
- async function checkLessonLocks() {
+async function checkLessonLocks() {
     showSpinner();
     const url = 'https://script.google.com/a/macros/mkrestaurant.com/s/AKfycbx07AVwc9d8p6vM50gecW-yyCIHmkvIudZEkM96q4jaKhZrLBa4mGNOECxXsQAwZl2Y5A/exec';
 
-   try {
+    try {
         const response = await fetch(url, {
             method: 'POST',
-            mode: 'no-cors', // หาก API ส่งค่ากลับมาไม่ได้ ให้ลองใช้ mode: 'cors' และตั้งค่า CORS ใน GAS
+            mode: 'cors', // เปลี่ยนเป็น cors เพื่อให้สามารถใช้ .json() ได้
             body: JSON.stringify({
                 action: 'getScores',
                 empId: currentUser['Employee ID']
             })
         });
 
+        if (!response.ok) throw new Error('Network response was not ok');
+
         const scores = await response.json(); 
         hideSpinner();
 
         const completedLessons = new Set();
         if (scores && scores.length > 0) {
-          scores.forEach(s => {
-            completedLessons.add(s['Lesson Name'].trim());
-          });
+            scores.forEach(s => {
+                completedLessons.add(s['Lesson Name'].trim());
+            });
         }
 
         let canAccessNext = true; 
         LESSON_SEQUENCE.forEach((lesson) => {
-          const btn = document.getElementById(lesson.id);
-          if (!btn) return;
-          const icon = btn.querySelector('.status-icon');
-          const isDone = completedLessons.has(lesson.title.trim());
-          if (canAccessNext) {
-            btn.disabled = false;
-            btn.classList.remove('lesson-btn-locked');
-            if (isDone) {
-              if (icon) icon.className = "status-icon fas fa-check-circle text-success";
+            const btn = document.getElementById(lesson.id);
+            if (!btn) return;
+            const icon = btn.querySelector('.status-icon');
+            const isDone = completedLessons.has(lesson.title.trim());
+
+            if (canAccessNext) {
+                btn.disabled = false;
+                btn.classList.remove('lesson-btn-locked');
+                if (isDone) {
+                    if (icon) icon.className = "status-icon fas fa-check-circle text-success";
+                } else {
+                    if (icon) icon.className = "status-icon fas fa-unlock text-primary";
+                }
             } else {
-              if (icon) icon.className = "status-icon fas fa-unlock text-primary";
+                btn.disabled = true;
+                btn.classList.add('lesson-btn-locked');
+                if (icon) icon.className = "status-icon fas fa-lock text-muted";
             }
-          } else {
-            btn.disabled = true;
-            btn.classList.add('lesson-btn-locked');
-            if (icon) icon.className = "status-icon fas fa-lock text-muted";
-          }
-          // ปลดล็อกตัวถัดไปถ้าตัวปัจจุบัน "ถูกทำแล้ว"
-          canAccessNext = isDone;
+            // ปลดล็อกตัวถัดไปถ้าตัวปัจจุบัน "ถูกทำแล้ว"
+            canAccessNext = isDone;
         });
-      }
+    } catch (err) {
+        hideSpinner();
+        console.error("Lock error:", err);
+        showPopup('เกิดข้อผิดพลาด', 'ไม่สามารถตรวจสอบสถานะบทเรียนได้');
+    }
 }
 
  const login = async () => {
