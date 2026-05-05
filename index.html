@@ -595,7 +595,7 @@ async function checkLessonLocks() {
 
         if (!response.ok) {
             const errorText = await response.text(); // ดูว่า Google ส่ง error อะไรมา
-            throw new Error('Network response not ok: ' + errorText);
+            throw new Error('Google Server Error: ' + errorMsg);
         }
 
         const scores = await response.json(); 
@@ -634,7 +634,7 @@ async function checkLessonLocks() {
     } catch (err) {
         hideSpinner();
         console.error("Lock error:", err);
-        showPopup('เกิดข้อผิดพลาด', 'ไม่สามารถตรวจสอบสถานะบทเรียนได้');
+        showPopup('เกิดข้อผิดพลาด', 'err.message');
     }
 }
 
