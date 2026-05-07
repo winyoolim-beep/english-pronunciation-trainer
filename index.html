@@ -625,23 +625,11 @@ function checkLessonLocks() {
 // =================================================================
 //  LESSON START & QUIZ LOGIC
 // =================================================================
-  async function startLesson(sheetName, lessonId, lessonTitle, quizType, config = {}) {
+ function startLesson(sheetName, lessonId, lessonTitle, quizType, config = {}) {
     showSpinner();
-   const baseUrl = 'https://script.google.com/macros/s/AKfycbxo7s02cpN-FQaLSDnQCROBpEh9pTKri3vmL6Dxz99xMZ7h0GEAUqpWUu2mTZ9g_gM_VQ/exec';
-   const url = 'https://corsproxy.io/?' + encodeURIComponent(baseUrl);
-    try {
-        const response = await fetch(url, {
-            method: 'POST',
-            body: JSON.stringify({ 
-                action: 'getLessonData', 
-                sheetName: sheetName 
-            })
-        });
-
-        const data = await response.json();
+    callGoogleApi('getLessonData', { sheetName: sheetName }, (data) => {
         hideSpinner();
-
-        if (data && data.length > 0) {
+        if (data && !data.error && data.length > 0) {
             currentLessonData = { 
                 id: lessonId, 
                 title: lessonTitle, 
@@ -656,14 +644,10 @@ function checkLessonLocks() {
             if (quizType === 'MC') navigateToMcQuiz();
             else if (quizType === 'PRON') navigateToPronunciationQuiz(); 
         } else {
-            showPopup('ข้อผิดพลาด', `ไม่พบข้อมูลสำหรับบทเรียนนี้ (${sheetName})`);
+            showPopup('ข้อผิดพลาด', `ไม่พบข้อมูลหรือเกิดข้อผิดพลาดในการดึงข้อมูล`);
         }
-    } catch (err) {
-        hideSpinner();
-        showPopup('เกิดข้อผิดพลาด', 'ไม่สามารถดึงข้อมูลบทเรียนได้: ' + err.message);
-        console.error(err);
-    }
-  }
+    });
+}
   
   function navigateToMcQuiz() { navigateTo('quiz-page-mc', setupMcQuiz); }
   function setupMcQuiz() {
@@ -913,93 +897,55 @@ function checkLessonLocks() {
     });
   }
 
-  const saveScore = async () => {
+ const saveScore = () => {
     showSpinner();
-   const baseUrl = 'https://script.google.com/macros/s/AKfycbxo7s02cpN-FQaLSDnQCROBpEh9pTKri3vmL6Dxz99xMZ7h0GEAUqpWUu2mTZ9g_gM_VQ/exec';
-const url = 'https://corsproxy.io/?' + encodeURIComponent(baseUrl);
     const scoreData = {
         'Employee ID': currentUser['Employee ID'],
-        'Title (Local)': currentUser['Title (Local)'],
-        'Employee Name (Thai)': currentUser['Employee Name (Thai)'],
-        'Employee Name (Eng)': currentUser['Employee Name (Eng)'],
-        'Business Unit Code': currentUser['Business Unit Code'],
-        'Business Unit Code Description': currentUser['Business Unit Code Description'],
-        'Company Code': currentUser['Company Code'],
-        'Company Code Description': currentUser['Company Code Description'],
         'Lesson Name': currentLessonData.title.replace(/\n/g, ' '), 
         'Max score': currentLessonData.questions.length, 
         'Score': score,
-        'accuracyData': currentAccuracyData 
+        'accuracyData': currentAccuracyData.join(',') // แปลง array เป็น string เพื่อลดขนาด URL
     };
 
-    try {
-        const response = await fetch(url, {
-            method: 'POST',
-            body: JSON.stringify({ 
-                action: 'saveScoreData', 
-                scoreData: scoreData 
-            })
-        });
-
-        const result = await response.json();
+    // ใช้ callGoogleApi แทน fetch เพื่อเลี่ยง CORS
+    callGoogleApi('saveScoreData', { scoreData: JSON.stringify(scoreData) }, (result) => {
         hideSpinner();
-
-        if (result.success) {
+        if (result && result.success) {
             showPopup('บันทึกสำเร็จ', 'ประวัติกิจกรรมถูกบันทึกแล้ว คุณสามารถทำกิจกรรมถัดไปได้ทันที');
-            document.getElementById('alertModal').addEventListener('hidden.bs.modal', () => navigateTo('lesson1-menu-page'), { once: true });
+            // สำคัญ: ต้องล้าง Modal ก่อนไปหน้าเมนู
+            const modalEl = document.getElementById('alertModal');
+            modalEl.addEventListener('hidden.bs.modal', () => navigateTo('lesson1-menu-page'), { once: true });
         } else {
-            showPopup('เกิดข้อผิดพลาด', result.message || 'ไม่สามารถบันทึกคะแนนได้');
+            showPopup('เกิดข้อผิดพลาด', (result && result.message) ? result.message : 'ไม่สามารถบันทึกคะแนนได้');
         }
-    } catch (err) {
-        hideSpinner();
-        showPopup('เกิดข้อผิดพลาด', 'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้');
-        console.error(err);
-    }
-  };
+    });
+};
 
-  const showScoresPage = async () => {
-    navigateTo('score-page', async () => {
+  const showScoresPage = () => {
+    navigateTo('score-page', () => {
         showSpinner();
-       const baseUrl = 'https://script.google.com/macros/s/AKfycbxo7s02cpN-FQaLSDnQCROBpEh9pTKri3vmL6Dxz99xMZ7h0GEAUqpWUu2mTZ9g_gM_VQ/exec';
-const url = 'https://corsproxy.io/?' + encodeURIComponent(baseUrl);
-      try {
-            const response = await fetch(url, {
-                method: 'POST',
-                body: JSON.stringify({ 
-                    action: 'getScores', 
-                    empId: currentUser['Employee ID'] 
-                })
-            });
-
-            const scores = await response.json();
+        callGoogleApi('getScores', { empId: currentUser['Employee ID'] }, (scores) => {
             hideSpinner();
-
             const tableBody = document.getElementById('score-table-body');
             if (!tableBody) return;
             
             tableBody.innerHTML = ''; 
-            if (scores && scores.length > 0) {
+            if (Array.isArray(scores) && scores.length > 0) {
                 scores.forEach(s => {
                     const row = tableBody.insertRow();
-                    // หมายเหตุ: s['AVG_Accuracy_Total'] มาจากฟังก์ชัน getScores เดิมของคุณ
                     const avg = parseFloat(s['AVG_Accuracy_Total']) || 0;
                     const displayAvg = `${(avg > 0 && avg <= 1 ? avg * 100 : avg).toFixed(0)}%`;
                     row.innerHTML = `<td>${s['Time Stamp']}</td><td>${s['Lesson Name']}</td><td>${s['Score']}</td><td>${s['Max score']}</td><td>${displayAvg}</td>`;
                 });
                 
-                // เริ่มต้น DataTable ใหม่
                 if ($.fn.DataTable.isDataTable('#score-table')) {
                     $('#score-table').DataTable().destroy();
                 }
                 new DataTable('#score-table', { responsive: true, order: [[0, 'desc']] });
             }
-        } catch (err) {
-            hideSpinner();
-            console.error("Error fetching scores:", err);
-            showPopup('เกิดข้อผิดพลาด', 'ไม่สามารถดึงข้อมูลคะแนนได้');
-        }
+        });
     });
-  };
+};
 
   const startTimer = (seconds, selector, handler) => {
     resetTimer();
