@@ -572,24 +572,38 @@
   /**
    * แก้ไข: ตรวจสอบเพียงว่ามีประวัติการทำแล้วหรือยัง (ไม่สนคะแนน) เพื่อปลดล็อกบทถัดไป
    */
-function checkLessonLocks() {
+async function checkLessonLocks() {
     showSpinner();
-    
-    // เรียกใช้ callGoogleApi (ใช้ action: 'getScores')
-    callGoogleApi('getScores', { empId: currentUser['Employee ID'] }, (scores) => {
-        hideSpinner();
+  const baseUrl = 'https://script.google.com/macros/s/AKfycbxo7s02cpN-FQaLSDnQCROBpEh9pTKri3vmL6Dxz99xMZ7h0GEAUqpWUu2mTZ9g_gM_VQ/exec';
+const url = 'https://corsproxy.io/?' + encodeURIComponent(baseUrl);
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            mode: 'no-cors', // เปลี่ยนกลับมาเป็น no-cors
+            redirect: 'follow',
+            body: JSON.stringify({
+                action: 'getScores',
+                empId: currentUser['Employee ID']
+            })
+        });
 
-        // ตรวจสอบว่า scores มีข้อมูลหรือไม่ (ถ้ามี error ก็จัดการที่นี่)
-        if (!scores || scores.error) {
-            console.error("Lock error:", scores ? scores.error : "No data");
-            showPopup('เกิดข้อผิดพลาด', 'ไม่สามารถดึงข้อมูลคะแนนได้');
-            return;
+        if (response.type === 'opaque') {
+            // ถือว่าส่งข้อมูลไปถึง Google แล้ว ให้ทำหน้าเว็บต่อไปได้เลย
+            navigateTo('main-menu-page');
         }
 
+        if (!response.ok) {
+            const errorText = await response.text(); // ดูว่า Google ส่ง error อะไรมา
+            throw new Error(errorText);
+        }
+
+        const scores = await response.json(); 
+        hideSpinner();
+
         const completedLessons = new Set();
-        if (Array.isArray(scores) && scores.length > 0) {
+        if (scores && scores.length > 0) {
             scores.forEach(s => {
-                if (s['Lesson Name']) completedLessons.add(s['Lesson Name'].trim());
+                completedLessons.add(s['Lesson Name'].trim());
             });
         }
 
@@ -616,46 +630,51 @@ function checkLessonLocks() {
             // ปลดล็อกตัวถัดไปถ้าตัวปัจจุบัน "ถูกทำแล้ว"
             canAccessNext = isDone;
         });
-    });
+    } catch (err) {
+        hideSpinner();
+        console.error("Lock error:", err);
+        // ใช้ err.message ตรงๆ จะแสดงข้อความที่แท้จริงจาก Google
+        showPopup('เกิดข้อผิดพลาด', err.message);
+    }
 }
 
-//  const login = async () => {
-//     const empId = document.getElementById('employee-id-input').value.trim();
-//     if (!empId) { showPopup('ผิดพลาด', 'กรุณาใส่รหัสพนักงาน'); return; }
+ const login = async () => {
+    const empId = document.getElementById('employee-id-input').value.trim();
+    if (!empId) { showPopup('ผิดพลาด', 'กรุณาใส่รหัสพนักงาน'); return; }
     
-//     showSpinner();
+    showSpinner();
   
-//     const baseUrl = 'https://script.google.com/macros/s/AKfycbxo7s02cpN-FQaLSDnQCROBpEh9pTKri3vmL6Dxz99xMZ7h0GEAUqpWUu2mTZ9g_gM_VQ/exec';
-// const url = 'https://corsproxy.io/?' + encodeURIComponent(baseUrl);
-//     try {
-//         const response = await fetch(url, {
-//             method: 'POST',
-//             headers: {
-//                 'Content-Type': 'application/json' // สำคัญมาก! บอก Google ว่าส่ง JSON
-//             },
-//             body: JSON.stringify({ action: 'getUserData', empId: empId })
-//         });
+    const baseUrl = 'https://script.google.com/macros/s/AKfycbxo7s02cpN-FQaLSDnQCROBpEh9pTKri3vmL6Dxz99xMZ7h0GEAUqpWUu2mTZ9g_gM_VQ/exec';
+const url = 'https://corsproxy.io/?' + encodeURIComponent(baseUrl);
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json' // สำคัญมาก! บอก Google ว่าส่ง JSON
+            },
+            body: JSON.stringify({ action: 'getUserData', empId: empId })
+        });
       
-//         // ถ้า response.ok ไม่ผ่าน ให้แสดงข้อความที่แท้จริง
-//         if (!response.ok) throw new Error('HTTP status ' + response.status)
+        // ถ้า response.ok ไม่ผ่าน ให้แสดงข้อความที่แท้จริง
+        if (!response.ok) throw new Error('HTTP status ' + response.status)
                 
-//         const user = await response.json();
-//         hideSpinner();
+        const user = await response.json();
+        hideSpinner();
 
-//         if (user && Object.keys(user).length > 0) { // ตรวจสอบว่าได้ข้อมูล user กลับมา
-//             currentUser = user;
-//             sessionStorage.setItem('currentUser', JSON.stringify(user));
-//             speakSequence([{ text: "Let's go", lang: 'en-US' }]);
-//             navigateTo('main-menu-page');
-//         } else {
-//             showPopup('ล็อกอินไม่สำเร็จ', 'ไม่พบรหัสพนักงานนี้ในระบบ');
-//         }
-//     } catch (err) {
-//         hideSpinner();
-//         showPopup('เกิดข้อผิดพลาด', 'ไม่สามารถเชื่อมต่อกับระบบได้');
-//         console.error(err);
-//     }
-//   };
+        if (user && Object.keys(user).length > 0) { // ตรวจสอบว่าได้ข้อมูล user กลับมา
+            currentUser = user;
+            sessionStorage.setItem('currentUser', JSON.stringify(user));
+            speakSequence([{ text: "Let's go", lang: 'en-US' }]);
+            navigateTo('main-menu-page');
+        } else {
+            showPopup('ล็อกอินไม่สำเร็จ', 'ไม่พบรหัสพนักงานนี้ในระบบ');
+        }
+    } catch (err) {
+        hideSpinner();
+        showPopup('เกิดข้อผิดพลาด', 'ไม่สามารถเชื่อมต่อกับระบบได้');
+        console.error(err);
+    }
+  };
   const logout = () => { currentUser = null; sessionStorage.removeItem('currentUser'); navigateTo('login-page'); };
 
 // =================================================================
@@ -1070,51 +1089,6 @@ const url = 'https://corsproxy.io/?' + encodeURIComponent(baseUrl);
       }
       return costs[s2.length];
   };
-
-  // --- ฟังก์ชันใหม่สำหรับ JSONP ---
-function callGoogleApi(action, data, callbackFunction) {
-    const callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
-    
-    // URL ของคุณ (ต้องเป็น URL ล่าสุดที่ Deploy แล้ว)
-    let url = 'https://script.google.com/macros/s/AKfycbxo7s02cpN-FQaLSDnQCROBpEh9pTKri3vmL6Dxz99xMZ7h0GEAUqpWUu2mTZ9g_gM_VQ/exec';
-    url += '?action=' + action + '&callback=' + callbackName;
-    
-    // เพิ่ม Data เข้าไปใน URL (สำหรับ GET Request)
-    for (let key in data) {
-        url += '&' + key + '=' + encodeURIComponent(data[key]);
-    }
-
-    const script = document.createElement('script');
-    
-    window[callbackName] = function(response) {
-        callbackFunction(response); // ส่งข้อมูลที่ได้กลับไป
-        delete window[callbackName];
-        document.body.removeChild(script);
-    };
-    
-    script.src = url;
-    document.body.appendChild(script);
-}
-
-// --- ตัวอย่างการปรับฟังก์ชัน login ของคุณให้ใช้ callGoogleApi ---
-async function login() {
-    const empId = document.getElementById('employee-id-input').value.trim();
-    if (!empId) { showPopup('ผิดพลาด', 'กรุณาใส่รหัสพนักงาน'); return; }
-    
-    showSpinner();
-    
-    // เรียกใช้ฟังก์ชันใหม่แทน fetch
-    callGoogleApi('getUserData', { empId: empId }, (user) => {
-        hideSpinner();
-        if (user && Object.keys(user).length > 0) {
-            currentUser = user;
-            sessionStorage.setItem('currentUser', JSON.stringify(user));
-            navigateTo('main-menu-page');
-        } else {
-            showPopup('ล็อกอินไม่สำเร็จ', 'ไม่พบรหัสพนักงานนี้');
-        }
-    });
-}
 </script>
 
 </body>
