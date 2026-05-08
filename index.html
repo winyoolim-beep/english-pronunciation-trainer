@@ -653,46 +653,22 @@ function checkLessonLocks() {
 // =================================================================
 //  LESSON START & QUIZ LOGIC
 // =================================================================
-  async function startLesson(sheetName, lessonId, lessonTitle, quizType, config = {}) {
+  function startLesson(sheetName, lessonId, lessonTitle, quizType, config = {}) {
     showSpinner();
-   const baseUrl = 'https://script.google.com/macros/s/AKfycbxo7s02cpN-FQaLSDnQCROBpEh9pTKri3vmL6Dxz99xMZ7h0GEAUqpWUu2mTZ9g_gM_VQ/exec';
-const url = 'https://corsproxy.io/?' + encodeURIComponent(baseUrl);
-    try {
-        const response = await fetch(url, {
-            method: 'POST',
-            body: JSON.stringify({ 
-                action: 'getLessonData', 
-                sheetName: sheetName 
-            })
-        });
-
-        const data = await response.json();
+    callGoogleApi('getLessonData', { sheetName: sheetName }, (data) => {
         hideSpinner();
-
-        if (data && data.length > 0) {
-            currentLessonData = { 
-                id: lessonId, 
-                title: lessonTitle, 
-                sheet: sheetName, 
-                questions: shuffleArray(data), 
-                config 
-            };
-            currentQuestionIndex = 0;
-            score = 0;
-            currentAccuracyData = []; 
-            
+        if (data && !data.error && data.length > 0) {
+            currentLessonData = { id: lessonId, title: lessonTitle, sheet: sheetName, questions: shuffleArray(data), config };
+            currentQuestionIndex = 0; score = 0; currentAccuracyData = []; 
             if (quizType === 'MC') navigateToMcQuiz();
             else if (quizType === 'PRON') navigateToPronunciationQuiz(); 
         } else {
-            showPopup('ข้อผิดพลาด', `ไม่พบข้อมูลสำหรับบทเรียนนี้ (${sheetName})`);
+            showPopup('ข้อผิดพลาด', 'ไม่พบข้อมูลบทเรียน');
         }
-    } catch (err) {
-        hideSpinner();
-        showPopup('เกิดข้อผิดพลาด', 'ไม่สามารถดึงข้อมูลบทเรียนได้: ' + err.message);
-        console.error(err);
-    }
-  }
+    });
+}
 
+  
   function navigateToMcQuiz() { navigateTo('quiz-page-mc', setupMcQuiz); }
   function setupMcQuiz() {
     selectedAnswer = null;
