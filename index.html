@@ -422,688 +422,311 @@
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
 
-
 <script>
  window.onload = function() {
   initializeApp();
  };
 
-// =================================================================
-//  APP INITIALIZATION & GLOBAL STATE
-// =================================================================
-  const appContainer = document.getElementById('app-container');
-  const spinner = document.getElementById('spinner-overlay');
-  const alertModal = new bootstrap.Modal(document.getElementById('alertModal'));
-  const alertModalLabel = document.getElementById('alertModalLabel');
-  const alertModalBody = document.getElementById('alertModalBody');
+ const appContainer = document.getElementById('app-container');
+ const spinner = document.getElementById('spinner-overlay');
+ const alertModal = new bootstrap.Modal(document.getElementById('alertModal'));
+ const alertModalLabel = document.getElementById('alertModalLabel');
+ const alertModalBody = document.getElementById('alertModalBody');
 
-  // App state
-  let currentUser = null;
-  let currentLessonData = null;
-  let currentQuestionIndex = 0;
-  let score = 0;
-  let lives = 1; 
-  let timerInterval = null;
-  let selectedAnswer = null;
-  let speechRecognition;
-  let voices = [];
-  let scoreDataTable = null;
-  let recordingTimeout = null; 
-  let currentAccuracyData = []; 
+ let currentUser = null;
+ let currentLessonData = null;
+ let currentQuestionIndex = 0;
+ let score = 0;
+ let lives = 1; 
+ let timerInterval = null;
+ let selectedAnswer = null;
+ let speechRecognition;
+ let voices = [];
+ let currentAccuracyData = []; 
 
-  // แผนผังลำดับบทเรียน
-  const LESSON_SEQUENCE = [
+ // แผนผังลำดับบทเรียน (สำคัญมากสำหรับการปลดล็อก)
+ const LESSON_SEQUENCE = [
     { id: "btn-test-1-1", title: "แบบทดสอบที่ 1.1 การฟังคำศัพท์ภาษาอังกฤษที่เป็นประโยชน์ (Test 1.1 Listening Vocabulary)" },
     { id: "btn-test-1-2", title: "แบบทดสอบที่ 1.2 การออกเสียงคำศัพท์ภาษาอังกฤษที่เป็นประโยชน์ (Test 1.2 Speaking Vocabulary)" },
     { id: "btn-test-2-1", title: "แบบทดสอบที่ 2.1 การฟังสำนวนภาษาอังกฤษที่เป็นประโยชน์ (Test 2.1 Listening Expressions)" },
     { id: "btn-test-2-2", title: "แบบทดสอบที่ 2.2 การออกเสียงสำนวนภาษาอังกฤษที่เป็นประโยชน์ (Test 2.2 Speaking Expressions)" },
     { id: "btn-test-3-1", title: "แบบทดสอบที่ 3.1 การฟังคำถามและคำตอบ (Test 3.1 Listening Q&A)" },
     { id: "btn-test-3-2", title: "แบบทดสอบที่ 3.2 การออกเสียง คำถามและคำตอบ (Test 3.2 Speaking Q&A)" }
-  ];
+ ];
 
-  
+ function initializeApp() {
+   const isSpeechSupported = ('speechSynthesis' in window);
+   const isRecognitionSupported = ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window);
 
-  function initializeApp() {
-    const isSpeechSupported = ('speechSynthesis' in window);
-    const isRecognitionSupported = ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window);
+   if (!isSpeechSupported || !isRecognitionSupported) {
+       showPopup('คำแนะนำ', 'เบราว์เซอร์นี้อาจไม่รองรับระบบเสียงสมบูรณ์ แนะนำให้ใช้ Samsung Internet สำหรับ Android หรือ Safari สำหรับ iOS');
+   }
 
-    if (!isSpeechSupported || !isRecognitionSupported) {
-        showPopup('คำแนะนำ', 'เบราว์เซอร์นี้อาจไม่รองรับระบบเสียงสมบูรณ์ แนะนำให้ใช้ Samsung Internet สำหรับ Android หรือ Safari สำหรับ iOS');
-    }
-    
-    if ('speechSynthesis' in window) {
-      if (speechSynthesis.onvoiceschanged !== undefined) {
-        speechSynthesis.onvoiceschanged = () => voices = speechSynthesis.getVoices();
-      }
-      voices = speechSynthesis.getVoices();
-    }
-    
-    if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
-      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-      speechRecognition = new SpeechRecognition();
-      speechRecognition.continuous = false;
-      speechRecognition.lang = 'en-US';
-      speechRecognition.interimResults = false;
-      speechRecognition.maxAlternatives = 1;
-    }
-    
-    const cachedUser = sessionStorage.getItem('currentUser');
-    if (cachedUser) {
-      currentUser = JSON.parse(cachedUser);
-      navigateTo('main-menu-page');
-    } else {
-      navigateTo('login-page');
-    }
-  }
+   if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
+     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+     speechRecognition = new SpeechRecognition();
+     speechRecognition.continuous = false;
+     speechRecognition.lang = 'en-US';
+   }
 
-// =================================================================
-//  GENERIC HELPER FUNCTIONS
-// =================================================================
-  const showSpinner = () => spinner.style.display = 'flex';
-  const hideSpinner = () => spinner.style.display = 'none';
-  const shuffleArray = (array) => array.sort(() => Math.random() - 0.5);
-  const resetTimer = () => { if (timerInterval) { clearInterval(timerInterval); timerInterval = null; } };
+   const cachedUser = sessionStorage.getItem('currentUser');
+   if (cachedUser) {
+     currentUser = JSON.parse(cachedUser);
+     navigateTo('main-menu-page');
+   } else {
+     navigateTo('login-page');
+   }
+ }
 
-  const showPopup = (title, message, showNextButton = false, nextAction = null) => {
-    alertModalLabel.textContent = title;
-    alertModalBody.innerHTML = message;
-    const nextBtn = document.getElementById('modal-next-btn');
-    const closeBtn = document.querySelector('#alertModal .modal-footer .btn-secondary');
-    
-    if (showNextButton && typeof nextAction === 'function') {
-      nextBtn.style.display = 'inline-block';
-      nextBtn.onclick = () => { alertModal.hide(); nextAction(); };
-      closeBtn.style.display = 'none';
-    } else {
-      nextBtn.style.display = 'none';
-      closeBtn.style.display = 'inline-block';
-    }
-    alertModal.show();
-  };
+ const showSpinner = () => spinner.style.display = 'flex';
+ const hideSpinner = () => spinner.style.display = 'none';
+ const shuffleArray = (array) => array.sort(() => Math.random() - 0.5);
+ const resetTimer = () => { if (timerInterval) { clearInterval(timerInterval); timerInterval = null; } };
 
-  function speakSequence(sequence, onComplete = null) {
-    if (!('speechSynthesis' in window) || !sequence || sequence.length === 0) {
-        if (onComplete) onComplete();
-        return;
-    }
-    speechSynthesis.cancel();
-    speechSynthesis.resume(); 
-    let currentIndex = 0;
+ const showPopup = (title, message, showNextButton = false, nextAction = null) => {
+   alertModalLabel.textContent = title;
+   alertModalBody.innerHTML = message;
+   const nextBtn = document.getElementById('modal-next-btn');
+   const closeBtn = document.querySelector('#alertModal .modal-footer .btn-secondary');
 
-    function speakNext() {
-        if (currentIndex >= sequence.length) { if (onComplete) onComplete(); return; }
-        const item = sequence[currentIndex];
-        if (item.delay) { setTimeout(() => { currentIndex++; speakNext(); }, item.delay); return; }
-        const utterance = new SpeechSynthesisUtterance(item.text);
-        utterance.lang = item.lang;
-        utterance.rate = item.rate || 1.0;
-        let allVoices = speechSynthesis.getVoices();
-        let suitableVoice = allVoices.find(voice => voice.lang === item.lang && voice.name.includes('Google'));
-        if (!suitableVoice) suitableVoice = allVoices.find(voice => voice.lang === item.lang);
-        if (suitableVoice) utterance.voice = suitableVoice;
-        utterance.onend = () => { currentIndex++; speakNext(); };
-        utterance.onerror = () => { currentIndex++; speakNext(); };
-        speechSynthesis.speak(utterance);
-    }
-    if (speechSynthesis.getVoices().length === 0) {
-      speechSynthesis.onvoiceschanged = speakNext;
-    } else {
-      speakNext();
-    }
-  }
+   if (showNextButton && typeof nextAction === 'function') {
+     nextBtn.style.display = 'inline-block';
+     nextBtn.onclick = () => { alertModal.hide(); nextAction(); };
+     closeBtn.style.display = 'none';
+   } else {
+     nextBtn.style.display = 'none';
+     closeBtn.style.display = 'inline-block';
+   }
+   alertModal.show();
+ };
 
-// =================================================================
-//  NAVIGATION & LESSON LOCKING LOGIC
-// =================================================================
-  const navigateTo = (pageName, onPageReady = null) => {
-    const template = document.getElementById(pageName);
-    if (template) {
-      appContainer.innerHTML = '';
-      appContainer.appendChild(template.content.cloneNode(true));
-      if (pageName === 'lesson1-menu-page') checkLessonLocks();
-      if (pageName === 'login-page') {
-        const loginBtn = document.getElementById('login-btn');
-        if(loginBtn) loginBtn.addEventListener('click', login);
-      }
-      if (typeof onPageReady === 'function') setTimeout(onPageReady, 0);
-    }
-  };
+ function speakSequence(sequence, onComplete = null) {
+   if (!('speechSynthesis' in window) || !sequence || sequence.length === 0) {
+       if (onComplete) onComplete();
+       return;
+   }
+   speechSynthesis.cancel();
+   let currentIndex = 0;
 
-  /**
-   * แก้ไข: ตรวจสอบเพียงว่ามีประวัติการทำแล้วหรือยัง (ไม่สนคะแนน) เพื่อปลดล็อกบทถัดไป
-   */
-function checkLessonLocks() {
-    showSpinner();
-    
-    // เรียกใช้ callGoogleApi (ใช้ action: 'getScores')
-    callGoogleApi('getScores', { empId: currentUser['Employee ID'] }, (scores) => {
-        hideSpinner();
+   function speakNext() {
+       if (currentIndex >= sequence.length) { if (onComplete) onComplete(); return; }
+       const item = sequence[currentIndex];
+       if (item.delay) { setTimeout(() => { currentIndex++; speakNext(); }, item.delay); return; }
+       const utterance = new SpeechSynthesisUtterance(item.text);
+       utterance.lang = item.lang;
+       utterance.rate = item.rate || 1.0;
+       utterance.onend = () => { currentIndex++; speakNext(); };
+       speechSynthesis.speak(utterance);
+   }
+   speakNext();
+ }
 
-        // ตรวจสอบว่า scores มีข้อมูลหรือไม่ (ถ้ามี error ก็จัดการที่นี่)
-        if (!scores || scores.error) {
-            console.error("Lock error:", scores ? scores.error : "No data");
-            showPopup('เกิดข้อผิดพลาด', 'ไม่สามารถดึงข้อมูลคะแนนได้');
-            return;
-        }
+ const navigateTo = (pageName, onPageReady = null) => {
+   const template = document.getElementById(pageName);
+   if (template) {
+     appContainer.innerHTML = '';
+     appContainer.appendChild(template.content.cloneNode(true));
+     if (pageName === 'lesson1-menu-page') checkLessonLocks();
+     if (pageName === 'login-page') {
+       const loginBtn = document.getElementById('login-btn');
+       if(loginBtn) loginBtn.addEventListener('click', login);
+     }
+     if (typeof onPageReady === 'function') setTimeout(onPageReady, 0);
+   }
+ };
 
-        const completedLessons = new Set();
-        if (Array.isArray(scores) && scores.length > 0) {
-            scores.forEach(s => {
-                if (s['Lesson Name']) completedLessons.add(s['Lesson Name'].trim());
-            });
-        }
+ function checkLessonLocks() {
+   showSpinner();
+   callGoogleApi('getScores', { empId: currentUser['Employee ID'] }, (scores) => {
+       hideSpinner();
+       if (!scores || scores.error) return;
+       const completedLessons = new Set();
+       if (Array.isArray(scores)) {
+           scores.forEach(s => {
+               if (s['Lesson Name']) completedLessons.add(s['Lesson Name'].trim());
+           });
+       }
+       let canAccessNext = true; 
+       LESSON_SEQUENCE.forEach((lesson) => {
+           const btn = document.getElementById(lesson.id);
+           if (!btn) return;
+           const icon = btn.querySelector('.status-icon');
+           const isDone = completedLessons.has(lesson.title.trim());
+           if (canAccessNext) {
+               btn.disabled = false;
+               btn.classList.remove('lesson-btn-locked');
+               if (icon) icon.className = isDone ? "status-icon fas fa-check-circle text-success" : "status-icon fas fa-unlock text-primary";
+           } else {
+               btn.disabled = true;
+               btn.classList.add('lesson-btn-locked');
+               if (icon) icon.className = "status-icon fas fa-lock text-muted";
+           }
+           canAccessNext = isDone;
+       });
+   });
+ }
 
-        let canAccessNext = true; 
-        LESSON_SEQUENCE.forEach((lesson) => {
-            const btn = document.getElementById(lesson.id);
-            if (!btn) return;
-            const icon = btn.querySelector('.status-icon');
-            const isDone = completedLessons.has(lesson.title.trim());
+ const logout = () => { currentUser = null; sessionStorage.removeItem('currentUser'); navigateTo('login-page'); };
 
-            if (canAccessNext) {
-                btn.disabled = false;
-                btn.classList.remove('lesson-btn-locked');
-                if (isDone) {
-                    if (icon) icon.className = "status-icon fas fa-check-circle text-success";
-                } else {
-                    if (icon) icon.className = "status-icon fas fa-unlock text-primary";
-                }
-            } else {
-                btn.disabled = true;
-                btn.classList.add('lesson-btn-locked');
-                if (icon) icon.className = "status-icon fas fa-lock text-muted";
-            }
-            // ปลดล็อกตัวถัดไปถ้าตัวปัจจุบัน "ถูกทำแล้ว"
-            canAccessNext = isDone;
-        });
-    });
-}
+ function startLesson(sheetName, lessonId, lessonTitle, quizType, config = {}) {
+   showSpinner();
+   callGoogleApi('getLessonData', { sheetName: sheetName }, (data) => {
+       hideSpinner();
+       if (data && !data.error && data.length > 0) {
+           currentLessonData = { id: lessonId, title: lessonTitle, sheet: sheetName, questions: shuffleArray(data), config };
+           currentQuestionIndex = 0; score = 0; currentAccuracyData = []; 
+           if (quizType === 'MC') navigateToMcQuiz();
+           else if (quizType === 'PRON') navigateToPronunciationQuiz(); 
+       } else {
+           showPopup('ข้อผิดพลาด', 'ไม่พบข้อมูลหรือเกิดข้อผิดพลาดในการดึงข้อมูล');
+       }
+   });
+ }
 
-//  const login = async () => {
-//     const empId = document.getElementById('employee-id-input').value.trim();
-//     if (!empId) { showPopup('ผิดพลาด', 'กรุณาใส่รหัสพนักงาน'); return; }
-    
-//     showSpinner();
-  
-//     const baseUrl = 'https://script.google.com/macros/s/AKfycbxo7s02cpN-FQaLSDnQCROBpEh9pTKri3vmL6Dxz99xMZ7h0GEAUqpWUu2mTZ9g_gM_VQ/exec';
-// const url = 'https://corsproxy.io/?' + encodeURIComponent(baseUrl);
-//     try {
-//         const response = await fetch(url, {
-//             method: 'POST',
-//             headers: {
-//                 'Content-Type': 'application/json' // สำคัญมาก! บอก Google ว่าส่ง JSON
-//             },
-//             body: JSON.stringify({ action: 'getUserData', empId: empId })
-//         });
-      
-//         // ถ้า response.ok ไม่ผ่าน ให้แสดงข้อความที่แท้จริง
-//         if (!response.ok) throw new Error('HTTP status ' + response.status)
-                
-//         const user = await response.json();
-//         hideSpinner();
+ function navigateToMcQuiz() { navigateTo('quiz-page-mc', setupMcQuiz); }
+ function setupMcQuiz() {
+   selectedAnswer = null;
+   resetTimer();
+   const question = currentLessonData.questions[currentQuestionIndex];
+   const [mainTitle, subTitle] = currentLessonData.title.split('\n');
+   appContainer.querySelector('#lesson-title-main').textContent = mainTitle;
+   appContainer.querySelector('#lesson-title-sub').textContent = subTitle || '';
+   appContainer.querySelector('#lesson-progress').style.width = `${((currentQuestionIndex + 1) / currentLessonData.questions.length) * 100}%`;
+   appContainer.querySelector('#question-text-thai').textContent = question['Translation'] || question['Thai Language'];
+   
+   const answers = shuffleArray([
+       { text: question['Answer1(True)'], correct: true },
+       { text: question['Answer2(Wrong)'], correct: false },
+       { text: question['Answer3(Wrong)'], correct: false }
+   ]);
 
-//         if (user && Object.keys(user).length > 0) { // ตรวจสอบว่าได้ข้อมูล user กลับมา
-//             currentUser = user;
-//             sessionStorage.setItem('currentUser', JSON.stringify(user));
-//             speakSequence([{ text: "Let's go", lang: 'en-US' }]);
-//             navigateTo('main-menu-page');
-//         } else {
-//             showPopup('ล็อกอินไม่สำเร็จ', 'ไม่พบรหัสพนักงานนี้ในระบบ');
-//         }
-//     } catch (err) {
-//         hideSpinner();
-//         showPopup('เกิดข้อผิดพลาด', 'ไม่สามารถเชื่อมต่อกับระบบได้');
-//         console.error(err);
-//     }
-//   };
-  const logout = () => { currentUser = null; sessionStorage.removeItem('currentUser'); navigateTo('login-page'); };
+   const container = appContainer.querySelector('#answer-options');
+   container.innerHTML = '';
+   answers.forEach((answer) => {
+       const button = document.createElement('button');
+       button.className = 'btn btn-outline-primary btn-lg answer-btn';
+       button.textContent = answer.text;
+       button.onclick = () => {
+           appContainer.querySelectorAll('.answer-btn').forEach(btn => btn.classList.remove('active'));
+           button.classList.add('active');
+           selectedAnswer = answer;
+           appContainer.querySelector('#submit-answer-btn').disabled = false;
+       };
+       container.appendChild(button);
+   });
+   appContainer.querySelector('#submit-answer-btn').onclick = submitMcAnswer;
+ }
 
-// =================================================================
-//  LESSON START & QUIZ LOGIC
-// =================================================================
-  async function startLesson(sheetName, lessonId, lessonTitle, quizType, config = {}) {
-    showSpinner();
-   const baseUrl = 'https://script.google.com/macros/s/AKfycbxo7s02cpN-FQaLSDnQCROBpEh9pTKri3vmL6Dxz99xMZ7h0GEAUqpWUu2mTZ9g_gM_VQ/exec';
-const url = 'https://corsproxy.io/?' + encodeURIComponent(baseUrl);
-    try {
-        const response = await fetch(url, {
-            method: 'POST',
-            body: JSON.stringify({ 
-                action: 'getLessonData', 
-                sheetName: sheetName 
-            })
-        });
+ function submitMcAnswer() {
+     const isCorrect = selectedAnswer && selectedAnswer.correct === true;
+     if (isCorrect) score++;
+     currentAccuracyData.push(isCorrect ? 1 : 0);
+     if (++currentQuestionIndex < currentLessonData.questions.length) setupMcQuiz();
+     else showResultScreen();
+ }
 
-        const data = await response.json();
-        hideSpinner();
+ function navigateToPronunciationQuiz() { navigateTo('quiz-page-pronunciation', setupPronunciationQuiz); }
+ function setupPronunciationQuiz() {
+     const question = currentLessonData.questions[currentQuestionIndex];
+     const target = question['Answer1(True)'] || question['Useful Expressions'] || question['Vocabulary'];
+     appContainer.querySelector('#target-phrase-text').textContent = target;
+     appContainer.querySelector('#record-btn').onclick = startRecording;
+     appContainer.querySelector('#next-btn').onclick = nextPronunciationQuestion;
+ }
 
-        if (data && data.length > 0) {
-            currentLessonData = { 
-                id: lessonId, 
-                title: lessonTitle, 
-                sheet: sheetName, 
-                questions: shuffleArray(data), 
-                config 
-            };
-            currentQuestionIndex = 0;
-            score = 0;
-            currentAccuracyData = []; 
-            
-            if (quizType === 'MC') navigateToMcQuiz();
-            else if (quizType === 'PRON') navigateToPronunciationQuiz(); 
-        } else {
-            showPopup('ข้อผิดพลาด', `ไม่พบข้อมูลสำหรับบทเรียนนี้ (${sheetName})`);
-        }
-    } catch (err) {
-        hideSpinner();
-        showPopup('เกิดข้อผิดพลาด', 'ไม่สามารถดึงข้อมูลบทเรียนได้: ' + err.message);
-        console.error(err);
-    }
-  }
+function startRecording() {
+     if (!speechRecognition) return;
+     const recordBtn = appContainer.querySelector('#record-btn');
+     recordBtn.disabled = true;
+     recordBtn.innerHTML = '<i class="fas fa-microphone-alt fa-beat"></i> กำลังฟัง...';
+     
+     speechRecognition.start();
+     speechRecognition.onresult = (event) => {
+         const transcript = event.results[0][0].transcript;
+         const target = appContainer.querySelector('#target-phrase-text').textContent;
+         
+         // ใช้ .includes เพื่อให้ตรวจจับคำได้ง่ายขึ้น และอัปเดตคะแนน
+         const isMatch = transcript.toLowerCase().includes(target.toLowerCase());
+         if (isMatch) score++;
+         
+         // เก็บประวัติความแม่นยำ (ถ้าต้องการ)
+         currentAccuracyData.push(isMatch ? 100 : 0);
+         
+         appContainer.querySelector('#record-btn').style.display = 'none';
+         appContainer.querySelector('#next-btn').style.display = 'block';
+         
+         // แสดงเสียง Feedback สั้นๆ
+         speakSequence([{ text: isMatch ? 'Excellent' : 'Try again', lang: 'en-US' }]);
+     };
+ }
 
-  function navigateToMcQuiz() { navigateTo('quiz-page-mc', setupMcQuiz); }
-  function setupMcQuiz() {
-    selectedAnswer = null;
-    resetTimer();
-    const question = currentLessonData.questions[currentQuestionIndex];
-    const config = currentLessonData.config;
-    const lessonSheet = currentLessonData.sheet;
-    const [mainTitle, subTitle] = currentLessonData.title.split('\n');
-    appContainer.querySelector('#lesson-title-main').textContent = mainTitle;
-    appContainer.querySelector('#lesson-title-sub').textContent = subTitle || '';
-    appContainer.querySelector('#lesson-progress').style.width = `${((currentQuestionIndex + 1) / currentLessonData.questions.length) * 100}%`;
+ function nextPronunciationQuestion() {
+     if (++currentQuestionIndex < currentLessonData.questions.length) setupPronunciationQuiz();
+     else showResultScreen();
+ }
 
-    const situationHeader = appContainer.querySelector('#situation-header');
-    const englishQuestionEl = appContainer.querySelector('#question-text-eng');
-    const cardFooterEl = appContainer.querySelector('#card-footer-mc');
-    
-    // ตรวจสอบว่าเป็นบทเรียนประเภทเลือกฟังเสียงหรือไม่
-    const isFindTheSoundQuiz = (lessonSheet.includes('Vocabulary') || lessonSheet.includes('Expressions')) && !config.isDialogue;
+ function showResultScreen() {
+   navigateTo('result-page', () => {
+     appContainer.querySelector('#final-score').textContent = score;
+     appContainer.querySelector('#total-questions').textContent = currentLessonData.questions.length;
+     appContainer.querySelector('#finish-lesson-btn').onclick = saveScore;
+   });
+ }
 
-    if (isFindTheSoundQuiz) {
-        situationHeader.style.display = 'none';
-        englishQuestionEl.style.display = 'none';
-        cardFooterEl.style.display = 'none';
-        appContainer.querySelector('#question-text-thai').textContent = question['Translation'] || question['Thai Language'];
-    } else if (config.isDialogue) {
-        situationHeader.style.display = 'block';
-        englishQuestionEl.style.display = 'block';
-        cardFooterEl.style.display = 'block';
-        appContainer.querySelector('#situation-text').textContent = 'สถานการณ์: ' + (question['Useful Expressions'] || 'General');
-        englishQuestionEl.textContent = question['Question'];
-        appContainer.querySelector('#question-text-thai').textContent = question['Question Thai'];
-        appContainer.querySelector('#listen-btn').onclick = () => listenAndStartTimerMc(1.0, false);
-        appContainer.querySelector('#listen-slow-btn').onclick = () => listenAndStartTimerMc(0.6, false);
-    }
+ function saveScore() {
+   showSpinner();
+   const scoreData = {
+       'Employee ID': currentUser['Employee ID'],
+       'Lesson Name': currentLessonData.title.replace(/\n/g, ' '), 
+       'Score': score,
+       'Max score': currentLessonData.questions.length,
+       'accuracyData': currentAccuracyData.join(',') // ส่งเป็น String สอดคล้องกับ Code.gs
+   };
+   callGoogleApi('saveScoreData', { scoreData: JSON.stringify(scoreData) }, (result) => {
+       hideSpinner();
+       if (result && result.success) navigateTo('lesson1-menu-page');
+   });
+ }
 
-    const answers = shuffleArray([
-        { text: question['Answer1(True)'], correct: true, trans: question['Answer1(True)Thai'] },
-        { text: question['Answer2(Wrong)'], correct: false },
-        { text: question['Answer3(Wrong)'], correct: false }
-    ]);
+ function showScoresPage() {
+   navigateTo('score-page', () => {
+       showSpinner();
+       callGoogleApi('getScores', { empId: currentUser['Employee ID'] }, (scores) => {
+           hideSpinner();
+           const tableBody = document.getElementById('score-table-body');
+           if (!tableBody) return;
+           tableBody.innerHTML = ''; 
+           if (Array.isArray(scores)) {
+               scores.forEach(s => {
+                   const row = tableBody.insertRow();
+                   row.innerHTML = `<td>${s['Time Stamp']}</td><td>${s['Lesson Name']}</td><td>${s['Score']}</td><td>${s['Max score']}</td><td>${s['AVG_Accuracy_Total'] || 0}%</td>`;
+               });
+           }
+       });
+   });
+ }
 
-    const container = appContainer.querySelector('#answer-options');
-    container.innerHTML = '';
-    answers.forEach((answer, index) => {
-        const button = document.createElement('button');
-        button.className = 'btn btn-outline-primary btn-lg answer-btn';
-        button.textContent = config.isDialogue ? answer.text : ['A', 'B', 'C'][index];
-        button.dataset.correct = answer.correct;
-        button.dataset.text = answer.text;
-        if (answer.trans) button.dataset.trans = answer.trans;
-        
-        // สำหรับ Dialogue ให้ปิดปุ่มไว้ก่อนจนกว่าจะกดฟัง
-        if (config.isDialogue) button.disabled = true;
-
-        button.onclick = () => {
-            appContainer.querySelectorAll('.answer-btn').forEach(btn => btn.classList.remove('active'));
-            button.classList.add('active');
-            if (!selectedAnswer && config.timer) startTimer(config.timer, '#timer', handleMcTimeout);
-            selectedAnswer = button;
-            speakSequence([{ text: button.dataset.text, lang: 'en-US', rate: isFindTheSoundQuiz ? 0.7 : 1.0 }]);
-            appContainer.querySelector('#submit-answer-btn').disabled = false;
-        };
-        container.appendChild(button);
-    });
-
-    appContainer.querySelector('#submit-answer-btn').onclick = submitMcAnswer;
-    appContainer.querySelector('#submit-answer-btn').disabled = true; 
-    
-    if (config.timer) {
-        appContainer.querySelector('#timer-container').style.display = 'block';
-        appContainer.querySelector('#timer').textContent = config.timer;
-        if (isFindTheSoundQuiz) startTimer(config.timer, '#timer', handleMcTimeout);
-    } else {
-        appContainer.querySelector('#timer-container').style.display = 'none';
-    }
-  }
-
-  /**
-   * แก้ไข: ปลดล็อกปุ่มคำตอบทันทีที่กดฟังเสียง (สำหรับบทเรียน 3.1)
-   */
-  function listenAndStartTimerMc(rate, isFindTheSoundQuiz, phrase) {
-    const question = currentLessonData.questions[currentQuestionIndex];
-    let speech = isFindTheSoundQuiz ? [{ text: phrase, lang: 'en-US', rate: rate }] : [
-      { text: 'สถานการณ์: ' + (question['Useful Expressions'] || ''), lang: 'th-TH' }, { delay: 500 },
-      { text: question['Question'], lang: 'en-US', rate: rate }
-    ];
-    speakSequence(speech);
-    
-    // ปลดล็อกปุ่มเลือกคำตอบ
-    appContainer.querySelectorAll('.answer-btn').forEach(btn => btn.disabled = false);
-
-    if (!isFindTheSoundQuiz && currentLessonData.config.timer && !timerInterval) {
-        startTimer(currentLessonData.config.timer, '#timer', handleMcTimeout);
-    }
-  }
-
-  function submitMcAnswer() {
-      resetTimer();
-      const isCorrect = selectedAnswer && selectedAnswer.dataset.correct === 'true';
-      const question = currentLessonData.questions[currentQuestionIndex];
-      const correctText = question['Answer1(True)'];
-      const correctThai = question['Answer1(True)Thai'] || '';
-      if (isCorrect) { score++; currentAccuracyData.push(1); } else { currentAccuracyData.push(0); }
-      showPopup(isCorrect ? 'ยอดเยี่ยม!' : 'เสียใจด้วย', 
-        `<p class="${isCorrect ? 'text-success' : 'text-danger'} fs-3">${isCorrect ? 'Excellent!' : 'Wrong Answer'}</p><p class="fw-bold">${correctText}</p><p class="text-muted">${correctThai}</p>`, 
-        true, nextMcQuestion);
-      speakSequence([{ text: isCorrect ? 'Excellent' : 'Sorry', lang: 'en-US' }]);
-  }
-
-  function handleMcTimeout() { submitMcAnswer(); }
-  function nextMcQuestion() {
-      currentQuestionIndex++;
-      if (currentQuestionIndex < currentLessonData.questions.length) setupMcQuiz();
-      else showResultScreen();
-  }
-
-  function navigateToPronunciationQuiz() { navigateTo('quiz-page-pronunciation', setupPronunciationQuiz); }
-  function setupPronunciationQuiz() {
-      lives = 1;
-      const question = currentLessonData.questions[currentQuestionIndex];
-      const target = question['Answer1(True)'] || question['Useful Expressions'] || question['Vocabulary'];
-      const thai = question['Translation'] || question['Thai Language'] || '';
-      const [main, sub] = currentLessonData.title.split('\n');
-      
-      appContainer.querySelector('#lesson-title-main').textContent = main;
-      appContainer.querySelector('#lesson-progress').style.width = `${((currentQuestionIndex + 1) / currentLessonData.questions.length) * 100}%`;
-      appContainer.querySelector('#target-phrase-text').textContent = target;
-      
-      const thaiEl = appContainer.querySelector('#target-phrase-thai-text');
-      if (thai) { thaiEl.textContent = `(${thai})`; thaiEl.style.display = 'block'; } else { thaiEl.style.display = 'none'; }
-
-      appContainer.querySelector('#listen-btn').onclick = () => speakSequence([{ text: target, lang: 'en-US' }]);
-      appContainer.querySelector('#listen-slow-btn').onclick = () => speakSequence([{ text: target, lang: 'en-US', rate: 0.5 }]);
-      
-      const recordBtn = appContainer.querySelector('#record-btn');
-      const nextBtn = appContainer.querySelector('#next-btn');
-      
-      recordBtn.style.display = 'block';
-      recordBtn.disabled = false;
-      recordBtn.innerHTML = '<i class="fas fa-microphone"></i> แตะเพื่อพูด (Record Voice)';
-      recordBtn.onclick = startRecording;
-      
-      nextBtn.style.display = 'none';
-      nextBtn.onclick = nextPronunciationQuestion;
-      
-      appContainer.querySelector('#record-result-area').style.display = 'none';
-      updateLivesDisplay();
-      appContainer.querySelector('#practice-area').style.visibility = 'visible';
-  }
-
-  function updateLivesDisplay() {
-    const container = appContainer.querySelector('.lives-container');
-    if(container) container.innerHTML = `<i class="fas fa-heart fa-2x ${lives > 0 ? 'text-danger' : 'text-light'}"></i>`;
-  }
-
-  function startRecording() {
-    if (!speechRecognition) { 
-      showPopup('ข้อผิดพลาด', 'เบราว์เซอร์ไม่รองรับการรับเสียง'); 
-      return; 
-    }
-
-    // 1. ขอสิทธิ์การใช้งานไมโครโฟนก่อน
-    navigator.mediaDevices.getUserMedia({ audio: true })
-      .then(stream => {
-        // เมื่อได้รับอนุญาต ให้ปิด stream นั้นเพื่อคืนไมโครโฟนให้ Browser Speech Recognition ใช้งาน
-        stream.getTracks().forEach(track => track.stop());
-        
-        // 2. เริ่มการทำงานของ Speech Recognition
-        executeSpeech();
-      })
-      .catch(err => {
-        console.error("ไม่ได้รับสิทธิ์ไมโครโฟน: ", err);
-        showPopup('ข้อผิดพลาด', 'กรุณากด "อนุญาต" (Allow) ให้เว็บเข้าถึงไมโครโฟนก่อนใช้งานครับ');
-      });
-  }
-
-  // ฟังก์ชันแยกออกมาเพื่อเริ่มบันทึกจริง
-  function executeSpeech() {
-    if (recordingTimeout) clearTimeout(recordingTimeout);
-
-    const recordBtn = appContainer.querySelector('#record-btn');
-    recordBtn.disabled = true;
-    recordBtn.innerHTML = '<i class="fas fa-microphone-alt fa-beat"></i> กำลังฟัง... (พูดภายใน 5 วิ)';
-    
-    speechRecognition.onresult = processSpeechResult;
-    
-    try {
-      speechRecognition.start();
-    } catch(e) {
-      console.log("Recognition already started or error:", e);
-    }
-
-    recordingTimeout = setTimeout(() => {
-      try { speechRecognition.stop(); } catch(e) {}
-      recordBtn.disabled = false;
-      recordBtn.innerHTML = '<i class="fas fa-microphone"></i> แตะเพื่อพูด (ลองใหม่)';
-      showPopup('แจ้งเตือน', 'ระบบยังไม่ได้ยินเสียงพูดของคุณ กรุณาลองพูดใหม่อีกครั้งให้ชัดเจนครับ');
-    }, 5000);
-  }
-
-  function processSpeechResult(event) {
-      if (recordingTimeout) clearTimeout(recordingTimeout);
-      const transcript = event.results[0][0].transcript;
-      const target = appContainer.querySelector('#target-phrase-text').textContent;
-      const similarity = calculateSimilarity(transcript.toLowerCase(), target.toLowerCase());
-      
-      // ลดเกณฑ์ความถูกต้องลงเหลือ 60% เพื่อความลื่นไหล
-      const ok = similarity >= 60; 
-      
-      currentAccuracyData.push(Math.round(similarity));
-      
-      const resultArea = appContainer.querySelector('#record-result-area');
-      resultArea.style.display = 'block';
-      appContainer.querySelector('#transcript-text').textContent = `"${transcript}"`;
-      
-      let feedbackMsg = "Try Again";
-      let feedbackClass = "text-danger";
-      if (similarity >= 90) { feedbackMsg = "Perfect!"; feedbackClass = "text-success"; }
-      else if (similarity >= 75) { feedbackMsg = "Excellent!"; feedbackClass = "text-success"; }
-      else if (similarity >= 60) { feedbackMsg = "Good Job!"; feedbackClass = "text-info"; }
-      
-      const feedbackEl = appContainer.querySelector('#feedback-text');
-      feedbackEl.textContent = `${feedbackMsg} (${Math.round(similarity)}%)`;
-      feedbackEl.className = `h4 fw-bold ${feedbackClass}`;
-      
-      if (ok) score++; else lives--;
-      
-      appContainer.querySelector('#next-btn').style.display = 'block';
-      appContainer.querySelector('#record-btn').style.display = 'none';
-      
-      updateLivesDisplay();
-      speakSequence([{ text: feedbackMsg, lang: 'en-US' }]);
-  }
-
-  function nextPronunciationQuestion() {
-      currentQuestionIndex++;
-      if (currentQuestionIndex < currentLessonData.questions.length) setupPronunciationQuiz();
-      else showResultScreen();
-  }
-
-  function showResultScreen() {
-    navigateTo('result-page', () => {
-      appContainer.querySelector('#final-score').textContent = score;
-      appContainer.querySelector('#total-questions').textContent = currentLessonData.questions.length;
-      appContainer.querySelector('#finish-lesson-btn').onclick = saveScore;
-    });
-  }
-
-  const saveScore = async () => {
-    showSpinner();
-   const baseUrl = 'https://script.google.com/macros/s/AKfycbxo7s02cpN-FQaLSDnQCROBpEh9pTKri3vmL6Dxz99xMZ7h0GEAUqpWUu2mTZ9g_gM_VQ/exec';
-const url = 'https://corsproxy.io/?' + encodeURIComponent(baseUrl);
-    const scoreData = {
-        'Employee ID': currentUser['Employee ID'],
-        'Title (Local)': currentUser['Title (Local)'],
-        'Employee Name (Thai)': currentUser['Employee Name (Thai)'],
-        'Employee Name (Eng)': currentUser['Employee Name (Eng)'],
-        'Business Unit Code': currentUser['Business Unit Code'],
-        'Business Unit Code Description': currentUser['Business Unit Code Description'],
-        'Company Code': currentUser['Company Code'],
-        'Company Code Description': currentUser['Company Code Description'],
-        'Lesson Name': currentLessonData.title.replace(/\n/g, ' '), 
-        'Max score': currentLessonData.questions.length, 
-        'Score': score,
-        'accuracyData': currentAccuracyData 
-    };
-
-    try {
-        const response = await fetch(url, {
-            method: 'POST',
-            body: JSON.stringify({ 
-                action: 'saveScoreData', 
-                scoreData: scoreData 
-            })
-        });
-
-        const result = await response.json();
-        hideSpinner();
-
-        if (result.success) {
-            showPopup('บันทึกสำเร็จ', 'ประวัติกิจกรรมถูกบันทึกแล้ว คุณสามารถทำกิจกรรมถัดไปได้ทันที');
-            document.getElementById('alertModal').addEventListener('hidden.bs.modal', () => navigateTo('lesson1-menu-page'), { once: true });
-        } else {
-            showPopup('เกิดข้อผิดพลาด', result.message || 'ไม่สามารถบันทึกคะแนนได้');
-        }
-    } catch (err) {
-        hideSpinner();
-        showPopup('เกิดข้อผิดพลาด', 'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้');
-        console.error(err);
-    }
-  };
-
-  const showScoresPage = async () => {
-    navigateTo('score-page', async () => {
-        showSpinner();
-       const baseUrl = 'https://script.google.com/macros/s/AKfycbxo7s02cpN-FQaLSDnQCROBpEh9pTKri3vmL6Dxz99xMZ7h0GEAUqpWUu2mTZ9g_gM_VQ/exec';
-const url = 'https://corsproxy.io/?' + encodeURIComponent(baseUrl);
-      try {
-            const response = await fetch(url, {
-                method: 'POST',
-                body: JSON.stringify({ 
-                    action: 'getScores', 
-                    empId: currentUser['Employee ID'] 
-                })
-            });
-
-            const scores = await response.json();
-            hideSpinner();
-
-            const tableBody = document.getElementById('score-table-body');
-            if (!tableBody) return;
-            
-            tableBody.innerHTML = ''; 
-            if (scores && scores.length > 0) {
-                scores.forEach(s => {
-                    const row = tableBody.insertRow();
-                    // หมายเหตุ: s['AVG_Accuracy_Total'] มาจากฟังก์ชัน getScores เดิมของคุณ
-                    const avg = parseFloat(s['AVG_Accuracy_Total']) || 0;
-                    const displayAvg = `${(avg > 0 && avg <= 1 ? avg * 100 : avg).toFixed(0)}%`;
-                    row.innerHTML = `<td>${s['Time Stamp']}</td><td>${s['Lesson Name']}</td><td>${s['Score']}</td><td>${s['Max score']}</td><td>${displayAvg}</td>`;
-                });
-                
-                // เริ่มต้น DataTable ใหม่
-                if ($.fn.DataTable.isDataTable('#score-table')) {
-                    $('#score-table').DataTable().destroy();
-                }
-                new DataTable('#score-table', { responsive: true, order: [[0, 'desc']] });
-            }
-        } catch (err) {
-            hideSpinner();
-            console.error("Error fetching scores:", err);
-            showPopup('เกิดข้อผิดพลาด', 'ไม่สามารถดึงข้อมูลคะแนนได้');
-        }
-    });
-  };
-
-  const startTimer = (seconds, selector, handler) => {
-    resetTimer();
-    const el = appContainer.querySelector(selector);
-    if (!el) return;
-    timerInterval = setInterval(() => {
-      seconds--; el.textContent = seconds;
-      if (seconds <= 0) { clearInterval(timerInterval); handler(); }
-    }, 1000);
-  };
-
-  const calculateSimilarity = (s1, s2) => {
-    let l = s1.length > s2.length ? s1 : s2;
-    let s = s1.length > s2.length ? s2 : s1;
-    if (l.length === 0) return 100.0;
-    return ((l.length - editDistance(l, s)) / l.length) * 100;
-  };
-
-  const editDistance = (s1, s2) => {
-      const costs = [];
-      for (let i = 0; i <= s1.length; i++) {
-          let lastValue = i;
-          for (let j = 0; j <= s2.length; j++) {
-              if (i === 0) costs[j] = j;
-              else if (j > 0) {
-                  let newValue = costs[j - 1];
-                  if (s1.charAt(i - 1) !== s2.charAt(j - 1)) newValue = Math.min(Math.min(newValue, lastValue), costs[j]) + 1;
-                  costs[j - 1] = lastValue; lastValue = newValue;
-              }
-          }
-          if (i > 0) costs[s2.length] = lastValue;
-      }
-      return costs[s2.length];
-  };
-
-  // --- ฟังก์ชันใหม่สำหรับ JSONP ---
-function callGoogleApi(action, data, callbackFunction) {
+ function callGoogleApi(action, data, callbackFunction) {
     const callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
-    
-    // URL ของคุณ (ต้องเป็น URL ล่าสุดที่ Deploy แล้ว)
     let url = 'https://script.google.com/macros/s/AKfycbxo7s02cpN-FQaLSDnQCROBpEh9pTKri3vmL6Dxz99xMZ7h0GEAUqpWUu2mTZ9g_gM_VQ/exec';
     url += '?action=' + action + '&callback=' + callbackName;
-    
-    // เพิ่ม Data เข้าไปใน URL (สำหรับ GET Request)
     for (let key in data) {
         url += '&' + key + '=' + encodeURIComponent(data[key]);
     }
-
     const script = document.createElement('script');
-    
     window[callbackName] = function(response) {
-        callbackFunction(response); // ส่งข้อมูลที่ได้กลับไป
+        callbackFunction(response);
         delete window[callbackName];
         document.body.removeChild(script);
     };
-    
     script.src = url;
     document.body.appendChild(script);
-}
+ }
 
-// --- ตัวอย่างการปรับฟังก์ชัน login ของคุณให้ใช้ callGoogleApi ---
-async function login() {
+ function login() {
     const empId = document.getElementById('employee-id-input').value.trim();
-    if (!empId) { showPopup('ผิดพลาด', 'กรุณาใส่รหัสพนักงาน'); return; }
-    
+    if (!empId) return;
     showSpinner();
-    
-    // เรียกใช้ฟังก์ชันใหม่แทน fetch
     callGoogleApi('getUserData', { empId: empId }, (user) => {
         hideSpinner();
         if (user && Object.keys(user).length > 0) {
@@ -1114,8 +737,9 @@ async function login() {
             showPopup('ล็อกอินไม่สำเร็จ', 'ไม่พบรหัสพนักงานนี้');
         }
     });
-}
+ }
 </script>
+
 
 </body>
 </html>
