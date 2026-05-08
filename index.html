@@ -574,46 +574,38 @@
    */
 function checkLessonLocks() {
     showSpinner();
-    
-    // เรียกใช้ callGoogleApi (ใช้ action: 'getScores')
     callGoogleApi('getScores', { empId: currentUser['Employee ID'] }, (scores) => {
         hideSpinner();
+        if (!scores || scores.error) return;
 
-        // ตรวจสอบว่า scores มีข้อมูลหรือไม่ (ถ้ามี error ก็จัดการที่นี่)
-        if (!scores || scores.error) {
-            console.error("Lock error:", scores ? scores.error : "No data");
-            showPopup('เกิดข้อผิดพลาด', 'ไม่สามารถดึงข้อมูลคะแนนได้');
-            return;
-        }
-
-        const completedLessons = new Set();
-        if (Array.isArray(scores) && scores.length > 0) {
-            scores.forEach(s => {
-                if (s['Lesson Name']) completedLessons.add(s['Lesson Name'].trim());
-            });
-        }
+        // ดึงรายชื่อบทเรียนทั้งหมดที่เคยทำมาไว้ใน Array
+        const completedLessons = Array.isArray(scores) ? scores.map(s => s['Lesson Name'] || "") : [];
 
         let canAccessNext = true; 
         LESSON_SEQUENCE.forEach((lesson) => {
             const btn = document.getElementById(lesson.id);
             if (!btn) return;
             const icon = btn.querySelector('.status-icon');
-            const isDone = completedLessons.has(lesson.title.trim());
+
+            // --- แก้ไขจุดนี้: ตรวจสอบเฉพาะ Keyword ภาษาอังกฤษในวงเล็บ ---
+            const keyword = lesson.title.includes('(') ? 
+                            lesson.title.split('(').pop().replace(')', '').trim() : 
+                            lesson.title.trim();
+            
+            const isDone = completedLessons.some(recordedName => 
+                recordedName.includes(keyword)
+            );
+            // -------------------------------------------------------
 
             if (canAccessNext) {
                 btn.disabled = false;
                 btn.classList.remove('lesson-btn-locked');
-                if (isDone) {
-                    if (icon) icon.className = "status-icon fas fa-check-circle text-success";
-                } else {
-                    if (icon) icon.className = "status-icon fas fa-unlock text-primary";
-                }
+                if (icon) icon.className = isDone ? "status-icon fas fa-check-circle text-success" : "status-icon fas fa-unlock text-primary";
             } else {
                 btn.disabled = true;
                 btn.classList.add('lesson-btn-locked');
                 if (icon) icon.className = "status-icon fas fa-lock text-muted";
             }
-            // ปลดล็อกตัวถัดไปถ้าตัวปัจจุบัน "ถูกทำแล้ว"
             canAccessNext = isDone;
         });
     });
