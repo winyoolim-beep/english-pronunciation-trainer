@@ -535,36 +535,45 @@
    }
  };
 
- function checkLessonLocks() {
-   showSpinner();
-   callGoogleApi('getScores', { empId: currentUser['Employee ID'] }, (scores) => {
-       hideSpinner();
-       if (!scores || scores.error) return;
-       const completedLessons = new Set();
-       if (Array.isArray(scores)) {
-           scores.forEach(s => {
-               if (s['Lesson Name']) completedLessons.add(s['Lesson Name'].trim());
-           });
-       }
-       let canAccessNext = true; 
-       LESSON_SEQUENCE.forEach((lesson) => {
-           const btn = document.getElementById(lesson.id);
-           if (!btn) return;
-           const icon = btn.querySelector('.status-icon');
-           const isDone = completedLessons.has(lesson.title.trim());
-           if (canAccessNext) {
-               btn.disabled = false;
-               btn.classList.remove('lesson-btn-locked');
-               if (icon) icon.className = isDone ? "status-icon fas fa-check-circle text-success" : "status-icon fas fa-unlock text-primary";
-           } else {
-               btn.disabled = true;
-               btn.classList.add('lesson-btn-locked');
-               if (icon) icon.className = "status-icon fas fa-lock text-muted";
-           }
-           canAccessNext = isDone;
-       });
-   });
- }
+function checkLessonLocks() {
+    showSpinner();
+    callGoogleApi('getScores', { empId: currentUser['Employee ID'] }, (scores) => {
+        hideSpinner();
+        if (!scores || scores.error) return;
+
+        // ดึงรายชื่อบทเรียนทั้งหมดที่เคยทำมาไว้ใน Array
+        const completedLessons = Array.isArray(scores) ? scores.map(s => s['Lesson Name'] || "") : [];
+
+        let canAccessNext = true; 
+        LESSON_SEQUENCE.forEach((lesson) => {
+            const btn = document.getElementById(lesson.id);
+            if (!btn) return;
+            const icon = btn.querySelector('.status-icon');
+
+            // --- แก้ไขจุดนี้: ตรวจสอบแบบ Partial Match (จับเฉพาะคำสำคัญ) ---
+            // นิยาม Keyword: เราจะดึงข้อความในวงเล็บ เช่น "Test 1.1 Listening Vocabulary" มาเช็ค
+            const keyword = lesson.title.split('\n').pop().replace('(', '').replace(')', '').trim();
+            
+            // ตรวจสอบว่าในประวัติ (completedLessons) มีบทเรียนไหนที่มี keyword นี้อยู่บ้างหรือไม่
+            const isDone = completedLessons.some(recordedName => 
+                recordedName.includes(keyword)
+            );
+            // -------------------------------------------------------
+
+            if (canAccessNext) {
+                btn.disabled = false;
+                btn.classList.remove('lesson-btn-locked');
+                if (icon) icon.className = isDone ? "status-icon fas fa-check-circle text-success" : "status-icon fas fa-unlock text-primary";
+            } else {
+                btn.disabled = true;
+                btn.classList.add('lesson-btn-locked');
+                if (icon) icon.className = "status-icon fas fa-lock text-muted";
+            }
+            // เงื่อนไขการปลดล็อกบทถัดไป: บทปัจจุบันต้อง "ผ่านแล้ว" (isDone)
+            canAccessNext = isDone;
+        });
+    });
+}
 
  const logout = () => { currentUser = null; sessionStorage.removeItem('currentUser'); navigateTo('login-page'); };
 
