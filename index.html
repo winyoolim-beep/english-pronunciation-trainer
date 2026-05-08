@@ -48,7 +48,7 @@
     max-width: 800px;
     margin: auto;
   }
-  
+
   footer {
     background-color: transparent;
     color: var(--secondary-color);
@@ -103,7 +103,7 @@
     background: #adb5bd; border: none; color: #fff; text-align: left;
     padding: 1rem; line-height: 1.2; cursor: not-allowed;
   }
-  
+
   @keyframes fadeIn {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
@@ -111,7 +111,7 @@
   .animate-fade-in {
     animation: fadeIn 0.5s ease-in-out;
   }
-  
+
   .progress { background-color: #e9ecef; }
   .progress-bar { background: linear-gradient(45deg, #007bff, #4ca9ff); }
   .answer-btn.active {
@@ -119,7 +119,7 @@
     color: var(--dark-color);
     border-color: var(--warning-color);
   }
-  
+
   .lives-container i {
       margin: 0 5px;
       transition: color 0.3s ease;
@@ -127,7 +127,7 @@
   .record-btn .fa-beat {
       animation-duration: 1.5s;
   }
-  
+
   .login-header {
       color: #003366;
       font-weight: bold;
@@ -168,7 +168,7 @@
 <template id="Lesson1_1(Task1)-page">
   <div class="d-flex flex-column align-items-center animate-fade-in w-100 h-100">
     <h4 id="lesson-title" class="mb-3 text-center"></h4>
-    
+
     <div class="progress mb-3 w-100" style="height: 20px;">
       <div id="lesson-progress" class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
     </div>
@@ -177,7 +177,7 @@
       <!-- Quiz content will be injected here -->
       <p class="lead">ฝึกการฟังเสียงภาษาอังกฤษ</p>
       <h2 class="display-6 my-3" id="question-text-thai"></h2>
-      
+
       <div class="d-grid gap-2 d-sm-flex justify-content-sm-center mb-4">
          <button id="listen-btn" class="btn btn-info btn-lg text-white"><i class="fas fa-volume-up"></i> ฟังเสียง</button>
          <button id="listen-slow-btn" class="btn btn-outline-info btn-lg"><i class="fas fa-volume-down"></i> ฟังเสียงแบบช้า</button>
@@ -195,7 +195,7 @@
         <button id="submit-answer-btn" class="btn btn-success btn-lg" disabled>ส่งคำตอบ (Submit)</button>
       </div>
     </div>
-    
+
     <div id="result-area" class="w-100 text-center d-none animate-fade-in">
        <h2 class="display-4">สรุปผล</h2>
        <p class="lead fs-3">คุณทำได้</p>
@@ -229,7 +229,7 @@
   <h4 class="mb-2">(สำหรับแบรนด์อื่น ๆ)</h4>
   <h4 class="mb-2" style="color: blue;">Useful English Expressions 1 Pre/Post Assesment</h4>
   <h4 class="mb-2">(For other brands)</h4>
-  
+
   <p class="text-muted mb-3">ใส่รหัสพนักงานแล้วไปกันเลย<br>(Enter your employee code and let's go.)</p>
   <div class="mb-3 mx-auto" style="max-width: 300px;">
    <input type="text" id="employee-id-input" class="form-control form-control-lg text-center" placeholder="รหัสพนักงาน">
@@ -256,7 +256,7 @@
 <template id="lesson1-menu-page">
  <h1 class="text-center mb-4">แบบทดสอบก่อนเรียนและหลังเรียนระดับที่ 1</h1>
  <p class="text-center text-muted">กรุณาทำกิจกรรมให้ครบตามลำดับเพื่อปลดล็อกกิจกรรมถัดไป</p>
- 
+
  <div class="d-grid gap-3">
   <!-- Test 1.1 -->
   <button id="btn-test-1-1" class="btn btn-outline-primary p-3 position-relative" onclick="startLesson('Test 1: Vocabulary', 'quiz-page-mc', 'แบบทดสอบที่ 1.1 การฟังคำศัพท์ภาษาอังกฤษที่เป็นประโยชน์\n(Test 1.1 Listening Vocabulary)', 'MC', { timer: 30, isDialogue: false })">
@@ -461,7 +461,7 @@
     { id: "btn-test-3-2", title: "แบบทดสอบที่ 3.2 การออกเสียง คำถามและคำตอบ (Test 3.2 Speaking Q&A)" }
   ];
 
-  
+
 
   function initializeApp() {
     const isSpeechSupported = ('speechSynthesis' in window);
@@ -470,14 +470,14 @@
     if (!isSpeechSupported || !isRecognitionSupported) {
         showPopup('คำแนะนำ', 'เบราว์เซอร์นี้อาจไม่รองรับระบบเสียงสมบูรณ์ แนะนำให้ใช้ Samsung Internet สำหรับ Android หรือ Safari สำหรับ iOS');
     }
-    
+
     if ('speechSynthesis' in window) {
       if (speechSynthesis.onvoiceschanged !== undefined) {
         speechSynthesis.onvoiceschanged = () => voices = speechSynthesis.getVoices();
       }
       voices = speechSynthesis.getVoices();
     }
-    
+
     if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
       speechRecognition = new SpeechRecognition();
@@ -486,7 +486,7 @@
       speechRecognition.interimResults = false;
       speechRecognition.maxAlternatives = 1;
     }
-    
+
     const cachedUser = sessionStorage.getItem('currentUser');
     if (cachedUser) {
       currentUser = JSON.parse(cachedUser);
@@ -509,7 +509,7 @@
     alertModalBody.innerHTML = message;
     const nextBtn = document.getElementById('modal-next-btn');
     const closeBtn = document.querySelector('#alertModal .modal-footer .btn-secondary');
-    
+
     if (showNextButton && typeof nextAction === 'function') {
       nextBtn.style.display = 'inline-block';
       nextBtn.onclick = () => { alertModal.hide(); nextAction(); };
@@ -574,7 +574,7 @@
    */
 function checkLessonLocks() {
     showSpinner();
-    
+
     // เรียกใช้ callGoogleApi (ใช้ action: 'getScores')
     callGoogleApi('getScores', { empId: currentUser['Employee ID'] }, (scores) => {
         hideSpinner();
@@ -625,11 +625,68 @@ function checkLessonLocks() {
 // =================================================================
 //  LESSON START & QUIZ LOGIC
 // =================================================================
- function startLesson(sheetName, lessonId, lessonTitle, quizType, config = {}) {
+  // async function startLesson(sheetName, lessonId, lessonTitle, quizType, config = {}) {
+  //   showSpinner();
+  //  const baseUrl = 'https://script.google.com/macros/s/AKfycbxo7s02cpN-FQaLSDnQCROBpEh9pTKri3vmL6Dxz99xMZ7h0GEAUqpWUu2mTZ9g_gM_VQ/exec';
+  //  const url = 'https://corsproxy.io/?' + encodeURIComponent(baseUrl);
+  //   try {
+  //       const response = await fetch(url, {
+  //           method: 'POST',
+  //           body: JSON.stringify({ 
+  //               action: 'getLessonData', 
+  //               sheetName: sheetName 
+  //           })
+  //       });
+
+  //       const data = await response.json();
+  //       hideSpinner();
+
+  //       if (data && data.length > 0) {
+  //           currentLessonData = { 
+  //               id: lessonId, 
+  //               title: lessonTitle, 
+  //               sheet: sheetName, 
+  //               questions: shuffleArray(data), 
+  //               config 
+  //           };
+  //           currentQuestionIndex = 0;
+  //           score = 0;
+  //           currentAccuracyData = []; 
+            
+  //           if (quizType === 'MC') navigateToMcQuiz();
+  //           else if (quizType === 'PRON') navigateToPronunciationQuiz(); 
+  //       } else {
+  //           showPopup('ข้อผิดพลาด', `ไม่พบข้อมูลสำหรับบทเรียนนี้ (${sheetName})`);
+  //       }
+  //   } catch (err) {
+  //       hideSpinner();
+  //       showPopup('เกิดข้อผิดพลาด', 'ไม่สามารถดึงข้อมูลบทเรียนได้: ' + err.message);
+  //       console.error(err);
+  //   }
+  // }
+async function startLesson(sheetName, lessonId, lessonTitle, quizType, config = {}) {
+  async function startLesson(sheetName, lessonId, lessonTitle, quizType, config = {}) {
     showSpinner();
+    
+    // เรียกใช้ callGoogleApi (ใช้ action: 'getLessonData')
     callGoogleApi('getLessonData', { sheetName: sheetName }, (data) => {
+   const baseUrl = 'https://script.google.com/macros/s/AKfycbxo7s02cpN-FQaLSDnQCROBpEh9pTKri3vmL6Dxz99xMZ7h0GEAUqpWUu2mTZ9g_gM_VQ/exec';
+   const url = 'https://corsproxy.io/?' + encodeURIComponent(baseUrl);
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            body: JSON.stringify({ 
+                action: 'getLessonData', 
+                sheetName: sheetName 
+            })
+        });
+
+        const data = await response.json();
         hideSpinner();
-        if (data && !data.error && data.length > 0) {
+
+        // ตรวจสอบว่ามีข้อมูลหรือไม่ (ใน JSONP error มักจะส่งมาเป็น object {error: ...})
+        if (data && !data.error && Array.isArray(data) && data.length > 0) {
+        if (data && data.length > 0) {
             currentLessonData = { 
                 id: lessonId, 
                 title: lessonTitle, 
@@ -640,15 +697,23 @@ function checkLessonLocks() {
             currentQuestionIndex = 0;
             score = 0;
             currentAccuracyData = []; 
-            
+
             if (quizType === 'MC') navigateToMcQuiz();
             else if (quizType === 'PRON') navigateToPronunciationQuiz(); 
         } else {
-            showPopup('ข้อผิดพลาด', `ไม่พบข้อมูลหรือเกิดข้อผิดพลาดในการดึงข้อมูล`);
+            const errorMsg = (data && data.error) ? data.error : `ไม่พบข้อมูลสำหรับบทเรียนนี้ (${sheetName})`;
+            showPopup('ข้อผิดพลาด', errorMsg);
+            showPopup('ข้อผิดพลาด', `ไม่พบข้อมูลสำหรับบทเรียนนี้ (${sheetName})`);
         }
     });
 }
-  
+    } catch (err) {
+        hideSpinner();
+        showPopup('เกิดข้อผิดพลาด', 'ไม่สามารถดึงข้อมูลบทเรียนได้: ' + err.message);
+        console.error(err);
+    }
+  }
+
   function navigateToMcQuiz() { navigateTo('quiz-page-mc', setupMcQuiz); }
   function setupMcQuiz() {
     selectedAnswer = null;
@@ -664,7 +729,7 @@ function checkLessonLocks() {
     const situationHeader = appContainer.querySelector('#situation-header');
     const englishQuestionEl = appContainer.querySelector('#question-text-eng');
     const cardFooterEl = appContainer.querySelector('#card-footer-mc');
-    
+
     // ตรวจสอบว่าเป็นบทเรียนประเภทเลือกฟังเสียงหรือไม่
     const isFindTheSoundQuiz = (lessonSheet.includes('Vocabulary') || lessonSheet.includes('Expressions')) && !config.isDialogue;
 
@@ -699,7 +764,7 @@ function checkLessonLocks() {
         button.dataset.correct = answer.correct;
         button.dataset.text = answer.text;
         if (answer.trans) button.dataset.trans = answer.trans;
-        
+
         // สำหรับ Dialogue ให้ปิดปุ่มไว้ก่อนจนกว่าจะกดฟัง
         if (config.isDialogue) button.disabled = true;
 
@@ -716,7 +781,7 @@ function checkLessonLocks() {
 
     appContainer.querySelector('#submit-answer-btn').onclick = submitMcAnswer;
     appContainer.querySelector('#submit-answer-btn').disabled = true; 
-    
+
     if (config.timer) {
         appContainer.querySelector('#timer-container').style.display = 'block';
         appContainer.querySelector('#timer').textContent = config.timer;
@@ -736,7 +801,7 @@ function checkLessonLocks() {
       { text: question['Question'], lang: 'en-US', rate: rate }
     ];
     speakSequence(speech);
-    
+
     // ปลดล็อกปุ่มเลือกคำตอบ
     appContainer.querySelectorAll('.answer-btn').forEach(btn => btn.disabled = false);
 
@@ -772,28 +837,28 @@ function checkLessonLocks() {
       const target = question['Answer1(True)'] || question['Useful Expressions'] || question['Vocabulary'];
       const thai = question['Translation'] || question['Thai Language'] || '';
       const [main, sub] = currentLessonData.title.split('\n');
-      
+
       appContainer.querySelector('#lesson-title-main').textContent = main;
       appContainer.querySelector('#lesson-progress').style.width = `${((currentQuestionIndex + 1) / currentLessonData.questions.length) * 100}%`;
       appContainer.querySelector('#target-phrase-text').textContent = target;
-      
+
       const thaiEl = appContainer.querySelector('#target-phrase-thai-text');
       if (thai) { thaiEl.textContent = `(${thai})`; thaiEl.style.display = 'block'; } else { thaiEl.style.display = 'none'; }
 
       appContainer.querySelector('#listen-btn').onclick = () => speakSequence([{ text: target, lang: 'en-US' }]);
       appContainer.querySelector('#listen-slow-btn').onclick = () => speakSequence([{ text: target, lang: 'en-US', rate: 0.5 }]);
-      
+
       const recordBtn = appContainer.querySelector('#record-btn');
       const nextBtn = appContainer.querySelector('#next-btn');
-      
+
       recordBtn.style.display = 'block';
       recordBtn.disabled = false;
       recordBtn.innerHTML = '<i class="fas fa-microphone"></i> แตะเพื่อพูด (Record Voice)';
       recordBtn.onclick = startRecording;
-      
+
       nextBtn.style.display = 'none';
       nextBtn.onclick = nextPronunciationQuestion;
-      
+
       appContainer.querySelector('#record-result-area').style.display = 'none';
       updateLivesDisplay();
       appContainer.querySelector('#practice-area').style.visibility = 'visible';
@@ -815,7 +880,7 @@ function checkLessonLocks() {
       .then(stream => {
         // เมื่อได้รับอนุญาต ให้ปิด stream นั้นเพื่อคืนไมโครโฟนให้ Browser Speech Recognition ใช้งาน
         stream.getTracks().forEach(track => track.stop());
-        
+
         // 2. เริ่มการทำงานของ Speech Recognition
         executeSpeech();
       })
@@ -832,9 +897,9 @@ function checkLessonLocks() {
     const recordBtn = appContainer.querySelector('#record-btn');
     recordBtn.disabled = true;
     recordBtn.innerHTML = '<i class="fas fa-microphone-alt fa-beat"></i> กำลังฟัง... (พูดภายใน 5 วิ)';
-    
+
     speechRecognition.onresult = processSpeechResult;
-    
+
     try {
       speechRecognition.start();
     } catch(e) {
@@ -854,31 +919,31 @@ function checkLessonLocks() {
       const transcript = event.results[0][0].transcript;
       const target = appContainer.querySelector('#target-phrase-text').textContent;
       const similarity = calculateSimilarity(transcript.toLowerCase(), target.toLowerCase());
-      
+
       // ลดเกณฑ์ความถูกต้องลงเหลือ 60% เพื่อความลื่นไหล
       const ok = similarity >= 60; 
-      
+
       currentAccuracyData.push(Math.round(similarity));
-      
+
       const resultArea = appContainer.querySelector('#record-result-area');
       resultArea.style.display = 'block';
       appContainer.querySelector('#transcript-text').textContent = `"${transcript}"`;
-      
+
       let feedbackMsg = "Try Again";
       let feedbackClass = "text-danger";
       if (similarity >= 90) { feedbackMsg = "Perfect!"; feedbackClass = "text-success"; }
       else if (similarity >= 75) { feedbackMsg = "Excellent!"; feedbackClass = "text-success"; }
       else if (similarity >= 60) { feedbackMsg = "Good Job!"; feedbackClass = "text-info"; }
-      
+
       const feedbackEl = appContainer.querySelector('#feedback-text');
       feedbackEl.textContent = `${feedbackMsg} (${Math.round(similarity)}%)`;
       feedbackEl.className = `h4 fw-bold ${feedbackClass}`;
-      
+
       if (ok) score++; else lives--;
-      
+
       appContainer.querySelector('#next-btn').style.display = 'block';
       appContainer.querySelector('#record-btn').style.display = 'none';
-      
+
       updateLivesDisplay();
       speakSequence([{ text: feedbackMsg, lang: 'en-US' }]);
   }
@@ -897,55 +962,93 @@ function checkLessonLocks() {
     });
   }
 
- const saveScore = () => {
+  const saveScore = async () => {
     showSpinner();
+   const baseUrl = 'https://script.google.com/macros/s/AKfycbxo7s02cpN-FQaLSDnQCROBpEh9pTKri3vmL6Dxz99xMZ7h0GEAUqpWUu2mTZ9g_gM_VQ/exec';
+const url = 'https://corsproxy.io/?' + encodeURIComponent(baseUrl);
     const scoreData = {
         'Employee ID': currentUser['Employee ID'],
+        'Title (Local)': currentUser['Title (Local)'],
+        'Employee Name (Thai)': currentUser['Employee Name (Thai)'],
+        'Employee Name (Eng)': currentUser['Employee Name (Eng)'],
+        'Business Unit Code': currentUser['Business Unit Code'],
+        'Business Unit Code Description': currentUser['Business Unit Code Description'],
+        'Company Code': currentUser['Company Code'],
+        'Company Code Description': currentUser['Company Code Description'],
         'Lesson Name': currentLessonData.title.replace(/\n/g, ' '), 
         'Max score': currentLessonData.questions.length, 
         'Score': score,
-        'accuracyData': currentAccuracyData.join(',') // แปลง array เป็น string เพื่อลดขนาด URL
+        'accuracyData': currentAccuracyData 
     };
 
-    // ใช้ callGoogleApi แทน fetch เพื่อเลี่ยง CORS
-    callGoogleApi('saveScoreData', { scoreData: JSON.stringify(scoreData) }, (result) => {
-        hideSpinner();
-        if (result && result.success) {
-            showPopup('บันทึกสำเร็จ', 'ประวัติกิจกรรมถูกบันทึกแล้ว คุณสามารถทำกิจกรรมถัดไปได้ทันที');
-            // สำคัญ: ต้องล้าง Modal ก่อนไปหน้าเมนู
-            const modalEl = document.getElementById('alertModal');
-            modalEl.addEventListener('hidden.bs.modal', () => navigateTo('lesson1-menu-page'), { once: true });
-        } else {
-            showPopup('เกิดข้อผิดพลาด', (result && result.message) ? result.message : 'ไม่สามารถบันทึกคะแนนได้');
-        }
-    });
-};
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            body: JSON.stringify({ 
+                action: 'saveScoreData', 
+                scoreData: scoreData 
+            })
+        });
 
-  const showScoresPage = () => {
-    navigateTo('score-page', () => {
+        const result = await response.json();
+        hideSpinner();
+
+        if (result.success) {
+            showPopup('บันทึกสำเร็จ', 'ประวัติกิจกรรมถูกบันทึกแล้ว คุณสามารถทำกิจกรรมถัดไปได้ทันที');
+            document.getElementById('alertModal').addEventListener('hidden.bs.modal', () => navigateTo('lesson1-menu-page'), { once: true });
+        } else {
+            showPopup('เกิดข้อผิดพลาด', result.message || 'ไม่สามารถบันทึกคะแนนได้');
+        }
+    } catch (err) {
+        hideSpinner();
+        showPopup('เกิดข้อผิดพลาด', 'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้');
+        console.error(err);
+    }
+  };
+
+  const showScoresPage = async () => {
+    navigateTo('score-page', async () => {
         showSpinner();
-        callGoogleApi('getScores', { empId: currentUser['Employee ID'] }, (scores) => {
+       const baseUrl = 'https://script.google.com/macros/s/AKfycbxo7s02cpN-FQaLSDnQCROBpEh9pTKri3vmL6Dxz99xMZ7h0GEAUqpWUu2mTZ9g_gM_VQ/exec';
+const url = 'https://corsproxy.io/?' + encodeURIComponent(baseUrl);
+      try {
+            const response = await fetch(url, {
+                method: 'POST',
+                body: JSON.stringify({ 
+                    action: 'getScores', 
+                    empId: currentUser['Employee ID'] 
+                })
+            });
+
+            const scores = await response.json();
             hideSpinner();
+
             const tableBody = document.getElementById('score-table-body');
             if (!tableBody) return;
-            
+
             tableBody.innerHTML = ''; 
-            if (Array.isArray(scores) && scores.length > 0) {
+            if (scores && scores.length > 0) {
                 scores.forEach(s => {
                     const row = tableBody.insertRow();
+                    // หมายเหตุ: s['AVG_Accuracy_Total'] มาจากฟังก์ชัน getScores เดิมของคุณ
                     const avg = parseFloat(s['AVG_Accuracy_Total']) || 0;
                     const displayAvg = `${(avg > 0 && avg <= 1 ? avg * 100 : avg).toFixed(0)}%`;
                     row.innerHTML = `<td>${s['Time Stamp']}</td><td>${s['Lesson Name']}</td><td>${s['Score']}</td><td>${s['Max score']}</td><td>${displayAvg}</td>`;
                 });
-                
+
+                // เริ่มต้น DataTable ใหม่
                 if ($.fn.DataTable.isDataTable('#score-table')) {
                     $('#score-table').DataTable().destroy();
                 }
                 new DataTable('#score-table', { responsive: true, order: [[0, 'desc']] });
             }
-        });
+        } catch (err) {
+            hideSpinner();
+            console.error("Error fetching scores:", err);
+            showPopup('เกิดข้อผิดพลาด', 'ไม่สามารถดึงข้อมูลคะแนนได้');
+        }
     });
-};
+  };
 
   const startTimer = (seconds, selector, handler) => {
     resetTimer();
@@ -984,24 +1087,24 @@ function checkLessonLocks() {
   // --- ฟังก์ชันใหม่สำหรับ JSONP ---
 function callGoogleApi(action, data, callbackFunction) {
     const callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
-    
+
     // URL ของคุณ (ต้องเป็น URL ล่าสุดที่ Deploy แล้ว)
     let url = 'https://script.google.com/macros/s/AKfycbxo7s02cpN-FQaLSDnQCROBpEh9pTKri3vmL6Dxz99xMZ7h0GEAUqpWUu2mTZ9g_gM_VQ/exec';
     url += '?action=' + action + '&callback=' + callbackName;
-    
+
     // เพิ่ม Data เข้าไปใน URL (สำหรับ GET Request)
     for (let key in data) {
         url += '&' + key + '=' + encodeURIComponent(data[key]);
     }
 
     const script = document.createElement('script');
-    
+
     window[callbackName] = function(response) {
         callbackFunction(response); // ส่งข้อมูลที่ได้กลับไป
         delete window[callbackName];
         document.body.removeChild(script);
     };
-    
+
     script.src = url;
     document.body.appendChild(script);
 }
@@ -1010,9 +1113,9 @@ function callGoogleApi(action, data, callbackFunction) {
 async function login() {
     const empId = document.getElementById('employee-id-input').value.trim();
     if (!empId) { showPopup('ผิดพลาด', 'กรุณาใส่รหัสพนักงาน'); return; }
-    
+
     showSpinner();
-    
+
     // เรียกใช้ฟังก์ชันใหม่แทน fetch
     callGoogleApi('getUserData', { empId: empId }, (user) => {
         hideSpinner();
@@ -1027,6 +1130,5 @@ async function login() {
 }
 </script>
 
-  
 </body>
 </html>
