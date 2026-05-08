@@ -1,1185 +1,2165 @@
 <!DOCTYPE html>
+
 <html lang="th">
+
 <head>
+
 <meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Useful English Expressions 1 Pre/Post Assesment</title>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
+
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
 <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;700&display=swap" rel="stylesheet">
+
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
+
+
 <style>
+
   .lesson-btn-locked {
+
     opacity: 0.6;
+
     cursor: not-allowed !important;
+
   }
+
+
 
   :root {
+
     --primary-color: #007bff; /* Main Blue */
+
     --secondary-color: #6c757d; /* Gray */
+
     --success-color: #198754;
+
     --info-color: #31a2b8;
+
     --warning-color: #ffc107;
+
     --danger-color: #dc3545;
+
     --light-color: #f8f9fa;
+
     --dark-color: #2c3e50; /* Dark Blue for text */
+
     --app-bg-color: #ffffff; /* White card background */
+
     --body-bg-color: #f0f2f5; /* Light gray page background */
+
   }
+
+
 
   body {
+
     font-family: 'Sarabun', sans-serif;
+
     background-color: var(--body-bg-color);
+
     color: var(--dark-color);
+
   }
+
+
 
   h1, h2, h3, h4, h5, h6 {
+
     color: var(--primary-color);
+
   }
+
+
 
   #app-container {
+
     background-color: var(--app-bg-color);
+
     border-radius: 15px;
+
     box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.1);
+
     border: 1px solid #dee2e6;
+
     max-width: 800px;
+
     margin: auto;
+
   }
+
+  
 
   footer {
+
     background-color: transparent;
+
     color: var(--secondary-color);
+
   }
+
+
 
   .spinner-overlay {
+
     position: fixed;
+
     top: 0;
+
     left: 0;
+
     width: 100%;
+
     height: 100%;
+
     background-color: rgba(0, 0, 0, 0.7);
+
     display: flex;
+
     justify-content: center;
+
     align-items: center;
+
     z-index: 2000;
+
   }
+
   .spinner-border {
+
     width: 4rem;
+
     height: 4rem;
+
     color: var(--primary-color);
+
   }
+
+
 
   .modal-content {
+
     background-color: var(--app-bg-color);
+
     color: var(--dark-color);
+
     border: 1px solid #dee2e6;
+
   }
+
   .modal-header, .modal-footer {
+
     border-bottom: 1px solid #dee2e6;
+
     border-top: 1px solid #dee2e6;
+
     background-color: #f8f9fa;
+
   }
+
+
 
   .btn {
+
     transition: all 0.3s ease;
+
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+
   }
+
   .btn:hover {
+
     transform: translateY(-2px);
+
     box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+
   }
+
   .btn-custom {
+
     background: linear-gradient(45deg, #007bff, #4ca9ff);
+
     border: none; color: white; font-weight: bold;
+
   }
+
   .btn-custom-lesson {
+
     background: linear-gradient(45deg, #36D1DC, #5B86E5);
+
     border: none; color: white; text-align: left; padding: 1rem; line-height: 1.2;
+
   }
+
   .btn-custom-lesson-disabled {
+
     background: #adb5bd; border: none; color: #fff; text-align: left;
+
     padding: 1rem; line-height: 1.2; cursor: not-allowed;
+
   }
+
+  
 
   @keyframes fadeIn {
+
     from { opacity: 0; transform: translateY(10px); }
+
     to { opacity: 1; transform: translateY(0); }
+
   }
+
   .animate-fade-in {
+
     animation: fadeIn 0.5s ease-in-out;
+
   }
+
+  
 
   .progress { background-color: #e9ecef; }
+
   .progress-bar { background: linear-gradient(45deg, #007bff, #4ca9ff); }
+
   .answer-btn.active {
+
     background-color: var(--warning-color);
+
     color: var(--dark-color);
+
     border-color: var(--warning-color);
+
   }
+
+  
 
   .lives-container i {
+
       margin: 0 5px;
+
       transition: color 0.3s ease;
+
   }
+
   .record-btn .fa-beat {
+
       animation-duration: 1.5s;
+
   }
+
+  
 
   .login-header {
+
       color: #003366;
+
       font-weight: bold;
+
   }
+
   #employee-id-input {
+
       border: 1px solid #ced4da;
+
   }
+
   .btn-custom-login {
+
       background: #0d6efd;
+
       border: none;
+
       color: white;
+
   }
+
   .btn-custom-login:hover {
+
       background: #0b5ed7;
+
       color: white;
+
   }
+
+
 
   .dataTables_wrapper .dataTables_paginate .page-item.active .page-link {
+
       background-color: var(--primary-color);
+
       border-color: var(--primary-color);
+
   }
+
   .dataTables_wrapper .dataTables_paginate .page-link {
+
       color: var(--primary-color);
+
   }
+
   .dataTables_wrapper .dataTables_paginate .page-link:hover {
+
       color: var(--dark-color);
+
   }
+
   #score-table thead {
+
     background-color: #f8f9fa;
+
   }
+
 </style>
 
+
+
 <!-- 
+
   Template for: Lesson 1.1 Vocabulary - Task 1 
+
   This template's behavior is controlled by Javascript.html.
+
   The timer will now only appear and start after a "Listen" button is pressed.
+
 -->
+
 <template id="Lesson1_1(Task1)-page">
+
   <div class="d-flex flex-column align-items-center animate-fade-in w-100 h-100">
+
     <h4 id="lesson-title" class="mb-3 text-center"></h4>
 
+    
+
     <div class="progress mb-3 w-100" style="height: 20px;">
+
       <div id="lesson-progress" class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+
     </div>
+
+
 
     <div id="quiz-area" class="w-100 text-center flex-grow-1">
+
       <!-- Quiz content will be injected here -->
+
       <p class="lead">ฝึกการฟังเสียงภาษาอังกฤษ</p>
+
       <h2 class="display-6 my-3" id="question-text-thai"></h2>
 
+      
+
       <div class="d-grid gap-2 d-sm-flex justify-content-sm-center mb-4">
+
          <button id="listen-btn" class="btn btn-info btn-lg text-white"><i class="fas fa-volume-up"></i> ฟังเสียง</button>
+
          <button id="listen-slow-btn" class="btn btn-outline-info btn-lg"><i class="fas fa-volume-down"></i> ฟังเสียงแบบช้า</button>
+
       </div>
+
+
 
       <div id="answer-options" class="d-grid gap-3 col-11 col-md-8 col-lg-6 mx-auto mb-4">
+
           <!-- Answer buttons will be injected here. They are disabled until a listen button is pressed. -->
+
       </div>
+
+
 
       <div id="timer-container" style="display: none;">
+
         <p class="h4 mb-3">เหลือเวลา: <span id="timer" class="fw-bold">20</span> วินาที</p>
+
       </div>
+
+
 
       <div class="d-grid col-10 col-md-6 col-lg-4 mx-auto">
+
         <button id="submit-answer-btn" class="btn btn-success btn-lg" disabled>ส่งคำตอบ (Submit)</button>
+
       </div>
+
     </div>
+
+    
 
     <div id="result-area" class="w-100 text-center d-none animate-fade-in">
+
        <h2 class="display-4">สรุปผล</h2>
+
        <p class="lead fs-3">คุณทำได้</p>
+
        <p class="display-1 fw-bold my-3">
+
           <span id="final-score">0</span> / <span id="total-questions">0</span>
+
        </p>
+
        <p class="fs-4">คะแนน</p>
+
        <button id="finish-lesson-btn" class="btn btn-primary btn-lg mt-3">เสร็จสิ้นการฝึก</button>
+
     </div>
+
   </div>
+
 </template>
 
+
+
 </head>
+
 <body class="d-flex flex-column min-vh-100 p-3">
+
 <main id="app-container" class="container-fluid p-4 my-auto animate-fade-in">
+
 </main>
+
 <footer class="mt-auto text-center py-3">
+
  <p class="mb-0">By : Winyoo Limrostham Sinc:5/2026</p>
+
 </footer>
 
+
+
 <div id="spinner-overlay" class="spinner-overlay" style="display: none;"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div></div>
+
 <div class="modal fade" id="alertModal" tabindex="-1" aria-labelledby="alertModalLabel" aria-hidden="true"><div class="modal-dialog modal-dialog-centered"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="alertModalLabel">แจ้งเตือน</h5><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div><div class="modal-body" id="alertModalBody">...</div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button><button type="button" class="btn btn-primary" id="modal-next-btn" style="display: none;">ข้อถัดไป (Next)</button></div></div></div></div>
+
+
 
 <!-- ========= PAGE TEMPLATES ========= -->
 
+
+
 <template id="login-page">
+
  <div class="text-center">
+
   <img src="https://lh5.googleusercontent.com/d/1mE28dMarDeIu1C8fnrCYMaKMaMJVIIJ2" alt="Logo" style="height: 120px;" class="mb-3">
+
   <h4 class="mb-2" style="color: blue;">แบบทดสอบก่อนเรียนและหลังเรียน</h4>
+
   <h4 class="mb-2" style="color: blue;">หลักสูตร สำนวนภาษาอังกฤษที่เป็นประโยชน์ 1</h4>
+
   <h4 class="mb-2">(สำหรับแบรนด์อื่น ๆ)</h4>
+
   <h4 class="mb-2" style="color: blue;">Useful English Expressions 1 Pre/Post Assesment</h4>
+
   <h4 class="mb-2">(For other brands)</h4>
 
+  
+
   <p class="text-muted mb-3">ใส่รหัสพนักงานแล้วไปกันเลย<br>(Enter your employee code and let's go.)</p>
+
   <div class="mb-3 mx-auto" style="max-width: 300px;">
+
    <input type="text" id="employee-id-input" class="form-control form-control-lg text-center" placeholder="รหัสพนักงาน">
+
   </div>
+
   <button id="login-btn" class="btn btn-custom btn-lg">ไปกันเลย (Let's go)</button>
+
  </div>
+
 </template>
+
+
 
 <template id="main-menu-page">
+
  <div class="text-center mb-4">
+
   <h1 class="display-6">เมนูหลัก (Main Menu)</h1>
+
  </div>
+
  <div class="d-grid gap-3">
+
   <button class="btn btn-custom-lesson btn-lg" onclick="navigateTo('lesson1-menu-page')">
+
    <strong>แบบทดสอบก่อนเรียนและหลังเรียนระดับที่ 1</strong>
+
    <small class="d-block">(Level 1 Pre/Post Assessment)</small>
+
   </button>
+
   <hr>
+
   <button class="btn btn-info btn-lg text-white" onclick="showScoresPage()">ดูบันทึกผลการเรียน (Score results)</button>
+
   <button class="btn btn-danger btn-lg" onclick="logout()">ออกจากโปรแกรม (Logout)</button>
+
  </div>
+
 </template>
+
+
 
 <template id="lesson1-menu-page">
+
  <h1 class="text-center mb-4">แบบทดสอบก่อนเรียนและหลังเรียนระดับที่ 1</h1>
+
  <p class="text-center text-muted">กรุณาทำกิจกรรมให้ครบตามลำดับเพื่อปลดล็อกกิจกรรมถัดไป</p>
 
+ 
+
  <div class="d-grid gap-3">
+
   <!-- Test 1.1 -->
+
   <button id="btn-test-1-1" class="btn btn-outline-primary p-3 position-relative" onclick="startLesson('Test 1: Vocabulary', 'quiz-page-mc', 'แบบทดสอบที่ 1.1 การฟังคำศัพท์ภาษาอังกฤษที่เป็นประโยชน์\n(Test 1.1 Listening Vocabulary)', 'MC', { timer: 30, isDialogue: false })">
+
     <div class="d-flex justify-content-between align-items-center">
+
       <div class="text-start">
+
         <strong>แบบทดสอบที่ 1.1 การฟังคำศัพท์ภาษาอังกฤษที่เป็นประโยชน์</strong><br>
+
         <small>(Test 1.1 Listening Vocabulary)</small>
+
       </div>
+
       <i class="status-icon fs-4"></i>
+
     </div>
+
   </button>
+
+
 
   <!-- Test 1.2 -->
+
   <button id="btn-test-1-2" class="btn btn-outline-primary p-3 position-relative" onclick="startLesson('Test 1: Vocabulary', 'quiz-page-pronunciation', 'แบบทดสอบที่ 1.2 การออกเสียงคำศัพท์ภาษาอังกฤษที่เป็นประโยชน์\n(Test 1.2 Speaking Vocabulary)', 'PRON', {})">
+
     <div class="d-flex justify-content-between align-items-center">
+
       <div class="text-start">
+
         <strong>แบบทดสอบที่ 1.2 การออกเสียงคำศัพท์ภาษาอังกฤษที่เป็นประโยชน์</strong><br>
+
         <small>(Test 1.2 Speaking Vocabulary)</small>
+
       </div>
+
       <i class="status-icon fs-4"></i>
+
     </div>
+
   </button>
 
+
+
   <hr>
+
+
 
   <!-- Test 2.1 -->
+
   <button id="btn-test-2-1" class="btn btn-outline-success p-3 position-relative" onclick="startLesson('Test 2: Expressions', 'quiz-page-mc', 'แบบทดสอบที่ 2.1 การฟังสำนวนภาษาอังกฤษที่เป็นประโยชน์\n(Test 2.1 Listening Expressions)', 'MC', { timer: 45, isDialogue: false })">
+
     <div class="d-flex justify-content-between align-items-center">
+
       <div class="text-start">
+
         <strong>แบบทดสอบที่ 2.1 การฟังสำนวนภาษาอังกฤษที่เป็นประโยชน์</strong><br>
+
         <small>(Test 2.1 Listening Expressions)</small>
+
       </div>
+
       <i class="status-icon fs-4"></i>
+
     </div>
+
   </button>
+
+
 
   <!-- Test 2.2 -->
+
   <button id="btn-test-2-2" class="btn btn-outline-success p-3 position-relative" onclick="startLesson('Test 2: Expressions', 'quiz-page-pronunciation', 'แบบทดสอบที่ 2.2 การออกเสียงสำนวนภาษาอังกฤษที่เป็นประโยชน์\n(Test 2.2 Speaking Expressions)', 'PRON', {})">
+
     <div class="d-flex justify-content-between align-items-center">
+
       <div class="text-start">
+
         <strong>แบบทดสอบที่ 2.2 การออกเสียงสำนวนภาษาอังกฤษที่เป็นประโยชน์</strong><br>
+
         <small>(Test 2.2 Speaking Expressions)</small>
+
       </div>
+
       <i class="status-icon fs-4"></i>
+
     </div>
+
   </button>
 
+
+
   <hr>
+
+
 
   <!-- Test 3.1 -->
+
   <button id="btn-test-3-1" class="btn btn-outline-warning p-3 position-relative" onclick="startLesson('Test 3: Q&A', 'quiz-page-mc', 'แบบทดสอบที่ 3.1 การฟังคำถามและคำตอบ\n(Test 3.1 Listening Q&A)', 'MC', { timer: 45, isDialogue: true })">
+
     <div class="d-flex justify-content-between align-items-center">
+
       <div class="text-start">
+
         <strong>แบบทดสอบที่ 3.1 การฟังคำถามและคำตอบ</strong><br>
+
         <small>(Test 3.1 Listening Q&A)</small>
+
       </div>
+
       <i class="status-icon fs-4"></i>
+
     </div>
+
   </button>
+
+
 
   <!-- Test 3.2 -->
+
   <button id="btn-test-3-2" class="btn btn-outline-warning p-3 position-relative" onclick="startLesson('Test 3: Q&A', 'quiz-page-pronunciation', 'แบบทดสอบที่ 3.2 การออกเสียง คำถามและคำตอบ\n(Test 3.2 Speaking Q&A)', 'PRON', { isDialogue: true })">
+
     <div class="d-flex justify-content-between align-items-center">
+
       <div class="text-start">
+
         <strong>แบบทดสอบที่ 3.2 การออกเสียง คำถามและคำตอบ</strong><br>
+
         <small>(Test 3.2 Speaking Q&A)</small>
+
       </div>
+
       <i class="status-icon fs-4"></i>
+
     </div>
+
   </button>
 
+
+
   <hr>
+
   <button class="btn btn-secondary mt-3" onclick="navigateTo('main-menu-page')">กลับหน้าหลัก (Main Menu)</button>
+
  </div>
+
 </template>
+
+
 
 <template id="score-page">
+
  <div class="animate-fade-in">
+
   <div class="d-flex justify-content-between align-items-center mb-4">
+
    <h1 class="mb-0">บันทึกผลการเรียน</h1>
+
    <button class="btn btn-secondary" onclick="navigateTo('main-menu-page')"><i class="fas fa-arrow-left"></i> กลับหน้าหลัก</button>
+
   </div>
+
   <p id="no-scores-message" class="text-center text-muted" style="display: none;">ยังไม่มีข้อมูลผลการเรียน</p>
+
   <div class="table-responsive">
+
    <table id="score-table" class="table table-striped table-bordered" style="width:100%">
+
     <thead>
+
      <tr>
+
       <th>วัน-เวลา</th>
+
       <th>ชื่อบทเรียน</th>
+
       <th>จำนวนข้อที่ทำถูก</th>
+
       <th>จำนวนข้อทั้งหมด</th>
+
       <th>เปอร์เซ็นความสำเร็จ</th>
+
      </tr>
+
     </thead>
+
     <tbody id="score-table-body"></tbody>
+
    </table>
+
   </div>
+
  </div>
+
 </template>
+
+
 
 <template id="quiz-page-mc">
+
  <div id="quiz-area-mc" class="d-flex flex-column align-items-center animate-fade-in w-100 h-100">
+
   <div class="text-center mb-3"><h4 class="mb-1" id="lesson-title-main"></h4><p class="text-muted h6" id="lesson-title-sub"></p></div>
+
   <div class="progress mb-3 w-100" style="height: 10px;"><div id="lesson-progress" class="progress-bar" role="progressbar" style="width: 0%;"></div></div>
+
   <p class="text-center text-muted mb-3" id="lesson-instruction"></p>
+
   <div class="card text-center mb-4 shadow-sm w-100">
+
    <div class="card-header bg-light" id="situation-header" style="display: none;"><p class="card-text fs-5" id="situation-text"></p></div>
+
    <div class="card-body"><p class="card-text fs-4 fw-bold" id="question-text-eng" style="display: none;"></p><p class="card-text fs-4" id="question-text-thai"></p></div>
+
    <div class="card-footer bg-light" id="card-footer-mc" style="display: none;"><div class="d-flex justify-content-center gap-2"><button id="listen-btn" class="btn btn-warning text-dark">ฟัง (Listen)</button><button id="listen-slow-btn" class="btn btn-outline-warning">ฟังช้า (Slow)</button></div></div>
+
   </div>
+
   <div id="answer-options" class="d-grid gap-3 mb-4 w-100"></div>
+
   <div id="timer-container" class="mt-4 w-100" style="display: none;">
+
    <div class="text-center mb-3"><p class="mb-0 fs-3 fw-bold text-danger"><span id="timer">0</span>s</p></div>
+
    <div class="d-grid"><button id="submit-answer-btn" class="btn btn-success btn-lg" disabled>ส่งคำตอบ (Submit)</button></div>
+
   </div>
+
  </div>
+
 </template>
+
+
 
 <template id="quiz-page-pronunciation">
+
  <div id="quiz-area-pronunciation" class="d-flex flex-column w-100 h-100">
+
   <div class="text-center mb-3"><h4 class="mb-1" id="lesson-title-main"></h4><p class="text-muted h6" id="lesson-title-sub"></p></div>
+
   <div class="progress mb-2 w-100" style="height: 10px;"><div id="lesson-progress" class="progress-bar bg-danger" role="progressbar"></div></div>
+
   <div class="lives-container text-center mb-3"></div>
+
   <div id="dialogue-display-area" class="card mb-3 shadow-sm" style="display: none;"></div>
+
   <div id="practice-area" style="visibility: hidden;">
+
    <p id="practice-instruction" class="text-center fs-5" style="display: none;">ต่อไป, ลองฝึกออกเสียงประโยคคำตอบที่ถูกต้อง</p>
+
    <div class="card text-center mb-3 shadow-sm bg-light">
+
     <div class="card-body">
+
      <p class="card-text text-muted mb-2">ฝึกการออกเสียงคำนี้:</p>
+
      <h2 class="card-title" id="target-phrase-text"></h2>
+
      <p class="card-text fs-4 text-muted" id="target-phrase-thai-text" style="display: none;"></p>
+
      <p class="card-text text-muted" id="karaoke-text" style="display: none;"></p>
+
      <div class="d-flex justify-content-center gap-2 mt-3"><button id="listen-btn" class="btn btn-info text-white"><i class="fas fa-volume-up"></i> ฟังเสียง</button><button id="listen-slow-btn" class="btn btn-outline-info"><i class="fas fa-volume-down"></i> ฟังแบบช้า</button></div>
+
     </div>
+
    </div>
+
    <div id="record-result-area" class="text-center p-3 mb-3 bg-light rounded" style="display: none;">
+
     <p class="mb-1">คุณพูดว่า:</p>
+
     <p id="transcript-text" class="h5"></p>
+
     <p id="feedback-text" class="h4 fw-bold"></p>
+
    </div>
+
    <div class="d-grid gap-2">
+
     <button id="record-btn" class="btn btn-danger btn-lg"><i class="fas fa-microphone"></i> แตะเพื่อพูด (Record Voice)</button>
+
     <button id="next-btn" class="btn btn-primary btn-lg" style="display: none;">ข้อถัดไป (Next)</button>
+
    </div>
+
   </div>
+
  </div>
+
 </template>
+
+
 
 <template id="result-page">
+
  <div id="result-area" class="w-100 text-center animate-fade-in">
+
   <h2 class="display-4">สรุปผล</h2>
+
   <p class="lead fs-3">คุณทำได้</p>
+
   <p class="display-1 fw-bold my-3">
+
    <span id="final-score">0</span> / <span id="total-questions">0</span>
+
   </p>
+
   <p class="fs-4">คะแนน</p>
+
   <button id="finish-lesson-btn" class="btn btn-custom btn-lg mt-3">เสร็จสิ้นการฝึก</button>
+
   </div>
+
 </template>
 
+
+
 <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
 <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
 
 
+
+
+
 <script>
+
  window.onload = function() {
+
   initializeApp();
+
  };
 
+
+
 // =================================================================
+
 //  APP INITIALIZATION & GLOBAL STATE
+
 // =================================================================
+
   const appContainer = document.getElementById('app-container');
+
   const spinner = document.getElementById('spinner-overlay');
+
   const alertModal = new bootstrap.Modal(document.getElementById('alertModal'));
+
   const alertModalLabel = document.getElementById('alertModalLabel');
+
   const alertModalBody = document.getElementById('alertModalBody');
 
+
+
   // App state
+
   let currentUser = null;
+
   let currentLessonData = null;
+
   let currentQuestionIndex = 0;
+
   let score = 0;
+
   let lives = 1; 
+
   let timerInterval = null;
+
   let selectedAnswer = null;
+
   let speechRecognition;
+
   let voices = [];
+
   let scoreDataTable = null;
+
   let recordingTimeout = null; 
+
   let currentAccuracyData = []; 
 
+
+
   // แผนผังลำดับบทเรียน
+
   const LESSON_SEQUENCE = [
+
     { id: "btn-test-1-1", title: "แบบทดสอบที่ 1.1 การฟังคำศัพท์ภาษาอังกฤษที่เป็นประโยชน์ (Test 1.1 Listening Vocabulary)" },
+
     { id: "btn-test-1-2", title: "แบบทดสอบที่ 1.2 การออกเสียงคำศัพท์ภาษาอังกฤษที่เป็นประโยชน์ (Test 1.2 Speaking Vocabulary)" },
+
     { id: "btn-test-2-1", title: "แบบทดสอบที่ 2.1 การฟังสำนวนภาษาอังกฤษที่เป็นประโยชน์ (Test 2.1 Listening Expressions)" },
+
     { id: "btn-test-2-2", title: "แบบทดสอบที่ 2.2 การออกเสียงสำนวนภาษาอังกฤษที่เป็นประโยชน์ (Test 2.2 Speaking Expressions)" },
+
     { id: "btn-test-3-1", title: "แบบทดสอบที่ 3.1 การฟังคำถามและคำตอบ (Test 3.1 Listening Q&A)" },
+
     { id: "btn-test-3-2", title: "แบบทดสอบที่ 3.2 การออกเสียง คำถามและคำตอบ (Test 3.2 Speaking Q&A)" }
+
   ];
 
 
 
+  
+
+
+
   function initializeApp() {
+
     const isSpeechSupported = ('speechSynthesis' in window);
+
     const isRecognitionSupported = ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window);
 
+
+
     if (!isSpeechSupported || !isRecognitionSupported) {
+
         showPopup('คำแนะนำ', 'เบราว์เซอร์นี้อาจไม่รองรับระบบเสียงสมบูรณ์ แนะนำให้ใช้ Samsung Internet สำหรับ Android หรือ Safari สำหรับ iOS');
+
     }
+
+    
 
     if ('speechSynthesis' in window) {
+
       if (speechSynthesis.onvoiceschanged !== undefined) {
+
         speechSynthesis.onvoiceschanged = () => voices = speechSynthesis.getVoices();
+
       }
+
       voices = speechSynthesis.getVoices();
+
     }
+
+    
 
     if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
+
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
       speechRecognition = new SpeechRecognition();
+
       speechRecognition.continuous = false;
+
       speechRecognition.lang = 'en-US';
+
       speechRecognition.interimResults = false;
+
       speechRecognition.maxAlternatives = 1;
+
     }
+
+    
 
     const cachedUser = sessionStorage.getItem('currentUser');
+
     if (cachedUser) {
+
       currentUser = JSON.parse(cachedUser);
+
       navigateTo('main-menu-page');
+
     } else {
+
       navigateTo('login-page');
+
     }
+
   }
 
+
+
 // =================================================================
+
 //  GENERIC HELPER FUNCTIONS
+
 // =================================================================
+
   const showSpinner = () => spinner.style.display = 'flex';
+
   const hideSpinner = () => spinner.style.display = 'none';
+
   const shuffleArray = (array) => array.sort(() => Math.random() - 0.5);
+
   const resetTimer = () => { if (timerInterval) { clearInterval(timerInterval); timerInterval = null; } };
 
+
+
   const showPopup = (title, message, showNextButton = false, nextAction = null) => {
+
     alertModalLabel.textContent = title;
+
     alertModalBody.innerHTML = message;
+
     const nextBtn = document.getElementById('modal-next-btn');
+
     const closeBtn = document.querySelector('#alertModal .modal-footer .btn-secondary');
 
+    
+
     if (showNextButton && typeof nextAction === 'function') {
+
       nextBtn.style.display = 'inline-block';
+
       nextBtn.onclick = () => { alertModal.hide(); nextAction(); };
+
       closeBtn.style.display = 'none';
+
     } else {
+
       nextBtn.style.display = 'none';
+
       closeBtn.style.display = 'inline-block';
+
     }
+
     alertModal.show();
+
   };
+
+
 
   function speakSequence(sequence, onComplete = null) {
+
     if (!('speechSynthesis' in window) || !sequence || sequence.length === 0) {
+
         if (onComplete) onComplete();
+
         return;
+
     }
+
     speechSynthesis.cancel();
+
     speechSynthesis.resume(); 
+
     let currentIndex = 0;
 
+
+
     function speakNext() {
+
         if (currentIndex >= sequence.length) { if (onComplete) onComplete(); return; }
+
         const item = sequence[currentIndex];
+
         if (item.delay) { setTimeout(() => { currentIndex++; speakNext(); }, item.delay); return; }
+
         const utterance = new SpeechSynthesisUtterance(item.text);
+
         utterance.lang = item.lang;
+
         utterance.rate = item.rate || 1.0;
+
         let allVoices = speechSynthesis.getVoices();
+
         let suitableVoice = allVoices.find(voice => voice.lang === item.lang && voice.name.includes('Google'));
+
         if (!suitableVoice) suitableVoice = allVoices.find(voice => voice.lang === item.lang);
+
         if (suitableVoice) utterance.voice = suitableVoice;
+
         utterance.onend = () => { currentIndex++; speakNext(); };
+
         utterance.onerror = () => { currentIndex++; speakNext(); };
+
         speechSynthesis.speak(utterance);
+
     }
+
     if (speechSynthesis.getVoices().length === 0) {
+
       speechSynthesis.onvoiceschanged = speakNext;
+
     } else {
+
       speakNext();
+
     }
+
   }
 
+
+
 // =================================================================
+
 //  NAVIGATION & LESSON LOCKING LOGIC
+
 // =================================================================
+
   const navigateTo = (pageName, onPageReady = null) => {
+
     const template = document.getElementById(pageName);
+
     if (template) {
+
       appContainer.innerHTML = '';
+
       appContainer.appendChild(template.content.cloneNode(true));
+
       if (pageName === 'lesson1-menu-page') checkLessonLocks();
+
       if (pageName === 'login-page') {
+
         const loginBtn = document.getElementById('login-btn');
+
         if(loginBtn) loginBtn.addEventListener('click', login);
+
       }
+
       if (typeof onPageReady === 'function') setTimeout(onPageReady, 0);
+
     }
+
   };
 
+
+
   /**
+
    * แก้ไข: ตรวจสอบเพียงว่ามีประวัติการทำแล้วหรือยัง (ไม่สนคะแนน) เพื่อปลดล็อกบทถัดไป
+
    */
-async function checkLessonLocks() {
+
 function checkLessonLocks() {
+
     showSpinner();
-  const baseUrl = 'https://script.google.com/macros/s/AKfycbxo7s02cpN-FQaLSDnQCROBpEh9pTKri3vmL6Dxz99xMZ7h0GEAUqpWUu2mTZ9g_gM_VQ/exec';
-const url = 'https://corsproxy.io/?' + encodeURIComponent(baseUrl);
-    try {
-        const response = await fetch(url, {
-            method: 'POST',
-            mode: 'no-cors', // เปลี่ยนกลับมาเป็น no-cors
-            redirect: 'follow',
-            body: JSON.stringify({
-                action: 'getScores',
-                empId: currentUser['Employee ID']
-            })
-        });
 
-        if (response.type === 'opaque') {
-            // ถือว่าส่งข้อมูลไปถึง Google แล้ว ให้ทำหน้าเว็บต่อไปได้เลย
-            navigateTo('main-menu-page');
-        }
     
+
     // เรียกใช้ callGoogleApi (ใช้ action: 'getScores')
+
     callGoogleApi('getScores', { empId: currentUser['Employee ID'] }, (scores) => {
+
         hideSpinner();
 
-        if (!response.ok) {
-            const errorText = await response.text(); // ดูว่า Google ส่ง error อะไรมา
-            throw new Error(errorText);
+
+
         // ตรวจสอบว่า scores มีข้อมูลหรือไม่ (ถ้ามี error ก็จัดการที่นี่)
+
         if (!scores || scores.error) {
+
             console.error("Lock error:", scores ? scores.error : "No data");
+
             showPopup('เกิดข้อผิดพลาด', 'ไม่สามารถดึงข้อมูลคะแนนได้');
+
             return;
+
         }
 
-        const scores = await response.json(); 
-        hideSpinner();
+
 
         const completedLessons = new Set();
-        if (scores && scores.length > 0) {
+
         if (Array.isArray(scores) && scores.length > 0) {
+
             scores.forEach(s => {
-                completedLessons.add(s['Lesson Name'].trim());
+
                 if (s['Lesson Name']) completedLessons.add(s['Lesson Name'].trim());
+
             });
+
         }
+
+
 
         let canAccessNext = true; 
+
         LESSON_SEQUENCE.forEach((lesson) => {
+
             const btn = document.getElementById(lesson.id);
+
             if (!btn) return;
+
             const icon = btn.querySelector('.status-icon');
+
             const isDone = completedLessons.has(lesson.title.trim());
 
+
+
             if (canAccessNext) {
+
                 btn.disabled = false;
+
                 btn.classList.remove('lesson-btn-locked');
+
                 if (isDone) {
+
                     if (icon) icon.className = "status-icon fas fa-check-circle text-success";
+
                 } else {
+
                     if (icon) icon.className = "status-icon fas fa-unlock text-primary";
+
                 }
+
             } else {
+
                 btn.disabled = true;
+
                 btn.classList.add('lesson-btn-locked');
+
                 if (icon) icon.className = "status-icon fas fa-lock text-muted";
+
             }
+
             // ปลดล็อกตัวถัดไปถ้าตัวปัจจุบัน "ถูกทำแล้ว"
+
             canAccessNext = isDone;
+
         });
-    } catch (err) {
-        hideSpinner();
-        console.error("Lock error:", err);
-        // ใช้ err.message ตรงๆ จะแสดงข้อความที่แท้จริงจาก Google
-        showPopup('เกิดข้อผิดพลาด', err.message);
-    }
+
     });
+
 }
 
- const login = async () => {
-    const empId = document.getElementById('employee-id-input').value.trim();
-    if (!empId) { showPopup('ผิดพลาด', 'กรุณาใส่รหัสพนักงาน'); return; }
-//  const login = async () => {
-//     const empId = document.getElementById('employee-id-input').value.trim();
-//     if (!empId) { showPopup('ผิดพลาด', 'กรุณาใส่รหัสพนักงาน'); return; }
 
-    showSpinner();
-//     showSpinner();
 
-    const baseUrl = 'https://script.google.com/macros/s/AKfycbxo7s02cpN-FQaLSDnQCROBpEh9pTKri3vmL6Dxz99xMZ7h0GEAUqpWUu2mTZ9g_gM_VQ/exec';
-const url = 'https://corsproxy.io/?' + encodeURIComponent(baseUrl);
-    try {
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json' // สำคัญมาก! บอก Google ว่าส่ง JSON
-            },
-            body: JSON.stringify({ action: 'getUserData', empId: empId })
-        });
-//     const baseUrl = 'https://script.google.com/macros/s/AKfycbxo7s02cpN-FQaLSDnQCROBpEh9pTKri3vmL6Dxz99xMZ7h0GEAUqpWUu2mTZ9g_gM_VQ/exec';
-// const url = 'https://corsproxy.io/?' + encodeURIComponent(baseUrl);
-//     try {
-//         const response = await fetch(url, {
-//             method: 'POST',
-//             headers: {
-//                 'Content-Type': 'application/json' // สำคัญมาก! บอก Google ว่าส่ง JSON
-//             },
-//             body: JSON.stringify({ action: 'getUserData', empId: empId })
-//         });
 
-        // ถ้า response.ok ไม่ผ่าน ให้แสดงข้อความที่แท้จริง
-        if (!response.ok) throw new Error('HTTP status ' + response.status)
-//         // ถ้า response.ok ไม่ผ่าน ให้แสดงข้อความที่แท้จริง
-//         if (!response.ok) throw new Error('HTTP status ' + response.status)
 
-        const user = await response.json();
-        hideSpinner();
-
-        if (user && Object.keys(user).length > 0) { // ตรวจสอบว่าได้ข้อมูล user กลับมา
-            currentUser = user;
-            sessionStorage.setItem('currentUser', JSON.stringify(user));
-            speakSequence([{ text: "Let's go", lang: 'en-US' }]);
-            navigateTo('main-menu-page');
-        } else {
-            showPopup('ล็อกอินไม่สำเร็จ', 'ไม่พบรหัสพนักงานนี้ในระบบ');
-        }
-    } catch (err) {
-        hideSpinner();
-        showPopup('เกิดข้อผิดพลาด', 'ไม่สามารถเชื่อมต่อกับระบบได้');
-        console.error(err);
-    }
-  };
-//         const user = await response.json();
-//         hideSpinner();
-
-//         if (user && Object.keys(user).length > 0) { // ตรวจสอบว่าได้ข้อมูล user กลับมา
-//             currentUser = user;
-//             sessionStorage.setItem('currentUser', JSON.stringify(user));
-//             speakSequence([{ text: "Let's go", lang: 'en-US' }]);
-//             navigateTo('main-menu-page');
-//         } else {
-//             showPopup('ล็อกอินไม่สำเร็จ', 'ไม่พบรหัสพนักงานนี้ในระบบ');
-//         }
-//     } catch (err) {
-//         hideSpinner();
-//         showPopup('เกิดข้อผิดพลาด', 'ไม่สามารถเชื่อมต่อกับระบบได้');
-//         console.error(err);
-//     }
-//   };
   const logout = () => { currentUser = null; sessionStorage.removeItem('currentUser'); navigateTo('login-page'); };
 
+
+
 // =================================================================
+
 //  LESSON START & QUIZ LOGIC
+
 // =================================================================
+
   async function startLesson(sheetName, lessonId, lessonTitle, quizType, config = {}) {
+
     showSpinner();
+
    const baseUrl = 'https://script.google.com/macros/s/AKfycbxo7s02cpN-FQaLSDnQCROBpEh9pTKri3vmL6Dxz99xMZ7h0GEAUqpWUu2mTZ9g_gM_VQ/exec';
-const url = 'https://corsproxy.io/?' + encodeURIComponent(baseUrl);
+
+   const url = 'https://corsproxy.io/?' + encodeURIComponent(baseUrl);
+
     try {
+
         const response = await fetch(url, {
+
             method: 'POST',
+
             body: JSON.stringify({ 
+
                 action: 'getLessonData', 
+
                 sheetName: sheetName 
+
             })
+
         });
 
+
+
         const data = await response.json();
+
         hideSpinner();
+
+
 
         if (data && data.length > 0) {
+
             currentLessonData = { 
+
                 id: lessonId, 
+
                 title: lessonTitle, 
+
                 sheet: sheetName, 
+
                 questions: shuffleArray(data), 
+
                 config 
+
             };
+
             currentQuestionIndex = 0;
+
             score = 0;
+
             currentAccuracyData = []; 
 
+            
+
             if (quizType === 'MC') navigateToMcQuiz();
+
             else if (quizType === 'PRON') navigateToPronunciationQuiz(); 
+
         } else {
+
             showPopup('ข้อผิดพลาด', `ไม่พบข้อมูลสำหรับบทเรียนนี้ (${sheetName})`);
+
         }
+
     } catch (err) {
+
         hideSpinner();
+
         showPopup('เกิดข้อผิดพลาด', 'ไม่สามารถดึงข้อมูลบทเรียนได้: ' + err.message);
+
         console.error(err);
+
     }
+
   }
+
+  
 
   function navigateToMcQuiz() { navigateTo('quiz-page-mc', setupMcQuiz); }
+
   function setupMcQuiz() {
+
     selectedAnswer = null;
+
     resetTimer();
+
     const question = currentLessonData.questions[currentQuestionIndex];
+
     const config = currentLessonData.config;
+
     const lessonSheet = currentLessonData.sheet;
+
     const [mainTitle, subTitle] = currentLessonData.title.split('\n');
+
     appContainer.querySelector('#lesson-title-main').textContent = mainTitle;
+
     appContainer.querySelector('#lesson-title-sub').textContent = subTitle || '';
+
     appContainer.querySelector('#lesson-progress').style.width = `${((currentQuestionIndex + 1) / currentLessonData.questions.length) * 100}%`;
 
+
+
     const situationHeader = appContainer.querySelector('#situation-header');
+
     const englishQuestionEl = appContainer.querySelector('#question-text-eng');
+
     const cardFooterEl = appContainer.querySelector('#card-footer-mc');
 
+    
+
     // ตรวจสอบว่าเป็นบทเรียนประเภทเลือกฟังเสียงหรือไม่
+
     const isFindTheSoundQuiz = (lessonSheet.includes('Vocabulary') || lessonSheet.includes('Expressions')) && !config.isDialogue;
 
+
+
     if (isFindTheSoundQuiz) {
+
         situationHeader.style.display = 'none';
+
         englishQuestionEl.style.display = 'none';
+
         cardFooterEl.style.display = 'none';
+
         appContainer.querySelector('#question-text-thai').textContent = question['Translation'] || question['Thai Language'];
+
     } else if (config.isDialogue) {
+
         situationHeader.style.display = 'block';
+
         englishQuestionEl.style.display = 'block';
+
         cardFooterEl.style.display = 'block';
+
         appContainer.querySelector('#situation-text').textContent = 'สถานการณ์: ' + (question['Useful Expressions'] || 'General');
+
         englishQuestionEl.textContent = question['Question'];
+
         appContainer.querySelector('#question-text-thai').textContent = question['Question Thai'];
+
         appContainer.querySelector('#listen-btn').onclick = () => listenAndStartTimerMc(1.0, false);
+
         appContainer.querySelector('#listen-slow-btn').onclick = () => listenAndStartTimerMc(0.6, false);
+
     }
+
+
 
     const answers = shuffleArray([
+
         { text: question['Answer1(True)'], correct: true, trans: question['Answer1(True)Thai'] },
+
         { text: question['Answer2(Wrong)'], correct: false },
+
         { text: question['Answer3(Wrong)'], correct: false }
+
     ]);
 
+
+
     const container = appContainer.querySelector('#answer-options');
+
     container.innerHTML = '';
+
     answers.forEach((answer, index) => {
+
         const button = document.createElement('button');
+
         button.className = 'btn btn-outline-primary btn-lg answer-btn';
+
         button.textContent = config.isDialogue ? answer.text : ['A', 'B', 'C'][index];
+
         button.dataset.correct = answer.correct;
+
         button.dataset.text = answer.text;
+
         if (answer.trans) button.dataset.trans = answer.trans;
 
+        
+
         // สำหรับ Dialogue ให้ปิดปุ่มไว้ก่อนจนกว่าจะกดฟัง
+
         if (config.isDialogue) button.disabled = true;
 
+
+
         button.onclick = () => {
+
             appContainer.querySelectorAll('.answer-btn').forEach(btn => btn.classList.remove('active'));
+
             button.classList.add('active');
+
             if (!selectedAnswer && config.timer) startTimer(config.timer, '#timer', handleMcTimeout);
+
             selectedAnswer = button;
+
             speakSequence([{ text: button.dataset.text, lang: 'en-US', rate: isFindTheSoundQuiz ? 0.7 : 1.0 }]);
+
             appContainer.querySelector('#submit-answer-btn').disabled = false;
+
         };
+
         container.appendChild(button);
+
     });
 
+
+
     appContainer.querySelector('#submit-answer-btn').onclick = submitMcAnswer;
+
     appContainer.querySelector('#submit-answer-btn').disabled = true; 
 
+    
+
     if (config.timer) {
+
         appContainer.querySelector('#timer-container').style.display = 'block';
+
         appContainer.querySelector('#timer').textContent = config.timer;
+
         if (isFindTheSoundQuiz) startTimer(config.timer, '#timer', handleMcTimeout);
+
     } else {
+
         appContainer.querySelector('#timer-container').style.display = 'none';
+
     }
+
   }
+
+
 
   /**
+
    * แก้ไข: ปลดล็อกปุ่มคำตอบทันทีที่กดฟังเสียง (สำหรับบทเรียน 3.1)
+
    */
+
   function listenAndStartTimerMc(rate, isFindTheSoundQuiz, phrase) {
+
     const question = currentLessonData.questions[currentQuestionIndex];
+
     let speech = isFindTheSoundQuiz ? [{ text: phrase, lang: 'en-US', rate: rate }] : [
+
       { text: 'สถานการณ์: ' + (question['Useful Expressions'] || ''), lang: 'th-TH' }, { delay: 500 },
+
       { text: question['Question'], lang: 'en-US', rate: rate }
+
     ];
+
     speakSequence(speech);
 
+    
+
     // ปลดล็อกปุ่มเลือกคำตอบ
+
     appContainer.querySelectorAll('.answer-btn').forEach(btn => btn.disabled = false);
 
+
+
     if (!isFindTheSoundQuiz && currentLessonData.config.timer && !timerInterval) {
+
         startTimer(currentLessonData.config.timer, '#timer', handleMcTimeout);
+
     }
+
   }
+
+
 
   function submitMcAnswer() {
+
       resetTimer();
+
       const isCorrect = selectedAnswer && selectedAnswer.dataset.correct === 'true';
+
       const question = currentLessonData.questions[currentQuestionIndex];
+
       const correctText = question['Answer1(True)'];
+
       const correctThai = question['Answer1(True)Thai'] || '';
+
       if (isCorrect) { score++; currentAccuracyData.push(1); } else { currentAccuracyData.push(0); }
+
       showPopup(isCorrect ? 'ยอดเยี่ยม!' : 'เสียใจด้วย', 
+
         `<p class="${isCorrect ? 'text-success' : 'text-danger'} fs-3">${isCorrect ? 'Excellent!' : 'Wrong Answer'}</p><p class="fw-bold">${correctText}</p><p class="text-muted">${correctThai}</p>`, 
+
         true, nextMcQuestion);
+
       speakSequence([{ text: isCorrect ? 'Excellent' : 'Sorry', lang: 'en-US' }]);
+
   }
+
+
 
   function handleMcTimeout() { submitMcAnswer(); }
+
   function nextMcQuestion() {
+
       currentQuestionIndex++;
+
       if (currentQuestionIndex < currentLessonData.questions.length) setupMcQuiz();
+
       else showResultScreen();
+
   }
+
+
 
   function navigateToPronunciationQuiz() { navigateTo('quiz-page-pronunciation', setupPronunciationQuiz); }
+
   function setupPronunciationQuiz() {
+
       lives = 1;
+
       const question = currentLessonData.questions[currentQuestionIndex];
+
       const target = question['Answer1(True)'] || question['Useful Expressions'] || question['Vocabulary'];
+
       const thai = question['Translation'] || question['Thai Language'] || '';
+
       const [main, sub] = currentLessonData.title.split('\n');
 
+      
+
       appContainer.querySelector('#lesson-title-main').textContent = main;
+
       appContainer.querySelector('#lesson-progress').style.width = `${((currentQuestionIndex + 1) / currentLessonData.questions.length) * 100}%`;
+
       appContainer.querySelector('#target-phrase-text').textContent = target;
 
+      
+
       const thaiEl = appContainer.querySelector('#target-phrase-thai-text');
+
       if (thai) { thaiEl.textContent = `(${thai})`; thaiEl.style.display = 'block'; } else { thaiEl.style.display = 'none'; }
 
+
+
       appContainer.querySelector('#listen-btn').onclick = () => speakSequence([{ text: target, lang: 'en-US' }]);
+
       appContainer.querySelector('#listen-slow-btn').onclick = () => speakSequence([{ text: target, lang: 'en-US', rate: 0.5 }]);
 
+      
+
       const recordBtn = appContainer.querySelector('#record-btn');
+
       const nextBtn = appContainer.querySelector('#next-btn');
 
+      
+
       recordBtn.style.display = 'block';
+
       recordBtn.disabled = false;
+
       recordBtn.innerHTML = '<i class="fas fa-microphone"></i> แตะเพื่อพูด (Record Voice)';
+
       recordBtn.onclick = startRecording;
 
+      
+
       nextBtn.style.display = 'none';
+
       nextBtn.onclick = nextPronunciationQuestion;
 
+      
+
       appContainer.querySelector('#record-result-area').style.display = 'none';
+
       updateLivesDisplay();
+
       appContainer.querySelector('#practice-area').style.visibility = 'visible';
+
   }
+
+
 
   function updateLivesDisplay() {
+
     const container = appContainer.querySelector('.lives-container');
+
     if(container) container.innerHTML = `<i class="fas fa-heart fa-2x ${lives > 0 ? 'text-danger' : 'text-light'}"></i>`;
+
   }
+
+
 
   function startRecording() {
+
     if (!speechRecognition) { 
+
       showPopup('ข้อผิดพลาด', 'เบราว์เซอร์ไม่รองรับการรับเสียง'); 
+
       return; 
+
     }
 
+
+
     // 1. ขอสิทธิ์การใช้งานไมโครโฟนก่อน
+
     navigator.mediaDevices.getUserMedia({ audio: true })
+
       .then(stream => {
+
         // เมื่อได้รับอนุญาต ให้ปิด stream นั้นเพื่อคืนไมโครโฟนให้ Browser Speech Recognition ใช้งาน
+
         stream.getTracks().forEach(track => track.stop());
 
+        
+
         // 2. เริ่มการทำงานของ Speech Recognition
+
         executeSpeech();
+
       })
+
       .catch(err => {
+
         console.error("ไม่ได้รับสิทธิ์ไมโครโฟน: ", err);
+
         showPopup('ข้อผิดพลาด', 'กรุณากด "อนุญาต" (Allow) ให้เว็บเข้าถึงไมโครโฟนก่อนใช้งานครับ');
+
       });
+
   }
 
+
+
   // ฟังก์ชันแยกออกมาเพื่อเริ่มบันทึกจริง
+
   function executeSpeech() {
+
     if (recordingTimeout) clearTimeout(recordingTimeout);
 
+
+
     const recordBtn = appContainer.querySelector('#record-btn');
+
     recordBtn.disabled = true;
+
     recordBtn.innerHTML = '<i class="fas fa-microphone-alt fa-beat"></i> กำลังฟัง... (พูดภายใน 5 วิ)';
+
+    
 
     speechRecognition.onresult = processSpeechResult;
 
+    
+
     try {
+
       speechRecognition.start();
+
     } catch(e) {
+
       console.log("Recognition already started or error:", e);
+
     }
 
+
+
     recordingTimeout = setTimeout(() => {
+
       try { speechRecognition.stop(); } catch(e) {}
+
       recordBtn.disabled = false;
+
       recordBtn.innerHTML = '<i class="fas fa-microphone"></i> แตะเพื่อพูด (ลองใหม่)';
+
       showPopup('แจ้งเตือน', 'ระบบยังไม่ได้ยินเสียงพูดของคุณ กรุณาลองพูดใหม่อีกครั้งให้ชัดเจนครับ');
+
     }, 5000);
+
   }
 
+
+
   function processSpeechResult(event) {
+
       if (recordingTimeout) clearTimeout(recordingTimeout);
+
       const transcript = event.results[0][0].transcript;
+
       const target = appContainer.querySelector('#target-phrase-text').textContent;
+
       const similarity = calculateSimilarity(transcript.toLowerCase(), target.toLowerCase());
 
+      
+
       // ลดเกณฑ์ความถูกต้องลงเหลือ 60% เพื่อความลื่นไหล
+
       const ok = similarity >= 60; 
+
+      
 
       currentAccuracyData.push(Math.round(similarity));
 
+      
+
       const resultArea = appContainer.querySelector('#record-result-area');
+
       resultArea.style.display = 'block';
+
       appContainer.querySelector('#transcript-text').textContent = `"${transcript}"`;
 
+      
+
       let feedbackMsg = "Try Again";
+
       let feedbackClass = "text-danger";
+
       if (similarity >= 90) { feedbackMsg = "Perfect!"; feedbackClass = "text-success"; }
+
       else if (similarity >= 75) { feedbackMsg = "Excellent!"; feedbackClass = "text-success"; }
+
       else if (similarity >= 60) { feedbackMsg = "Good Job!"; feedbackClass = "text-info"; }
 
+      
+
       const feedbackEl = appContainer.querySelector('#feedback-text');
+
       feedbackEl.textContent = `${feedbackMsg} (${Math.round(similarity)}%)`;
+
       feedbackEl.className = `h4 fw-bold ${feedbackClass}`;
+
+      
 
       if (ok) score++; else lives--;
 
+      
+
       appContainer.querySelector('#next-btn').style.display = 'block';
+
       appContainer.querySelector('#record-btn').style.display = 'none';
 
+      
+
       updateLivesDisplay();
+
       speakSequence([{ text: feedbackMsg, lang: 'en-US' }]);
+
   }
+
+
 
   function nextPronunciationQuestion() {
+
       currentQuestionIndex++;
+
       if (currentQuestionIndex < currentLessonData.questions.length) setupPronunciationQuiz();
+
       else showResultScreen();
+
   }
+
+
 
   function showResultScreen() {
+
     navigateTo('result-page', () => {
+
       appContainer.querySelector('#final-score').textContent = score;
+
       appContainer.querySelector('#total-questions').textContent = currentLessonData.questions.length;
+
       appContainer.querySelector('#finish-lesson-btn').onclick = saveScore;
+
     });
+
   }
 
+
+
   const saveScore = async () => {
+
     showSpinner();
+
    const baseUrl = 'https://script.google.com/macros/s/AKfycbxo7s02cpN-FQaLSDnQCROBpEh9pTKri3vmL6Dxz99xMZ7h0GEAUqpWUu2mTZ9g_gM_VQ/exec';
+
 const url = 'https://corsproxy.io/?' + encodeURIComponent(baseUrl);
+
     const scoreData = {
+
         'Employee ID': currentUser['Employee ID'],
+
         'Title (Local)': currentUser['Title (Local)'],
+
         'Employee Name (Thai)': currentUser['Employee Name (Thai)'],
+
         'Employee Name (Eng)': currentUser['Employee Name (Eng)'],
+
         'Business Unit Code': currentUser['Business Unit Code'],
+
         'Business Unit Code Description': currentUser['Business Unit Code Description'],
+
         'Company Code': currentUser['Company Code'],
+
         'Company Code Description': currentUser['Company Code Description'],
+
         'Lesson Name': currentLessonData.title.replace(/\n/g, ' '), 
+
         'Max score': currentLessonData.questions.length, 
+
         'Score': score,
+
         'accuracyData': currentAccuracyData 
+
     };
+
+
 
     try {
+
         const response = await fetch(url, {
+
             method: 'POST',
+
             body: JSON.stringify({ 
+
                 action: 'saveScoreData', 
+
                 scoreData: scoreData 
+
             })
+
         });
 
+
+
         const result = await response.json();
+
         hideSpinner();
+
+
 
         if (result.success) {
+
             showPopup('บันทึกสำเร็จ', 'ประวัติกิจกรรมถูกบันทึกแล้ว คุณสามารถทำกิจกรรมถัดไปได้ทันที');
+
             document.getElementById('alertModal').addEventListener('hidden.bs.modal', () => navigateTo('lesson1-menu-page'), { once: true });
+
         } else {
+
             showPopup('เกิดข้อผิดพลาด', result.message || 'ไม่สามารถบันทึกคะแนนได้');
+
         }
+
     } catch (err) {
+
         hideSpinner();
+
         showPopup('เกิดข้อผิดพลาด', 'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้');
+
         console.error(err);
+
     }
+
   };
+
+
 
   const showScoresPage = async () => {
+
     navigateTo('score-page', async () => {
+
         showSpinner();
+
        const baseUrl = 'https://script.google.com/macros/s/AKfycbxo7s02cpN-FQaLSDnQCROBpEh9pTKri3vmL6Dxz99xMZ7h0GEAUqpWUu2mTZ9g_gM_VQ/exec';
+
 const url = 'https://corsproxy.io/?' + encodeURIComponent(baseUrl);
+
       try {
+
             const response = await fetch(url, {
+
                 method: 'POST',
+
                 body: JSON.stringify({ 
+
                     action: 'getScores', 
+
                     empId: currentUser['Employee ID'] 
+
                 })
+
             });
 
+
+
             const scores = await response.json();
+
             hideSpinner();
+
+
 
             const tableBody = document.getElementById('score-table-body');
+
             if (!tableBody) return;
 
+            
+
             tableBody.innerHTML = ''; 
+
             if (scores && scores.length > 0) {
+
                 scores.forEach(s => {
+
                     const row = tableBody.insertRow();
+
                     // หมายเหตุ: s['AVG_Accuracy_Total'] มาจากฟังก์ชัน getScores เดิมของคุณ
+
                     const avg = parseFloat(s['AVG_Accuracy_Total']) || 0;
+
                     const displayAvg = `${(avg > 0 && avg <= 1 ? avg * 100 : avg).toFixed(0)}%`;
+
                     row.innerHTML = `<td>${s['Time Stamp']}</td><td>${s['Lesson Name']}</td><td>${s['Score']}</td><td>${s['Max score']}</td><td>${displayAvg}</td>`;
+
                 });
 
+                
+
                 // เริ่มต้น DataTable ใหม่
+
                 if ($.fn.DataTable.isDataTable('#score-table')) {
+
                     $('#score-table').DataTable().destroy();
+
                 }
+
                 new DataTable('#score-table', { responsive: true, order: [[0, 'desc']] });
+
             }
+
         } catch (err) {
+
             hideSpinner();
+
             console.error("Error fetching scores:", err);
+
             showPopup('เกิดข้อผิดพลาด', 'ไม่สามารถดึงข้อมูลคะแนนได้');
+
         }
+
     });
+
   };
+
+
 
   const startTimer = (seconds, selector, handler) => {
+
     resetTimer();
+
     const el = appContainer.querySelector(selector);
+
     if (!el) return;
+
     timerInterval = setInterval(() => {
+
       seconds--; el.textContent = seconds;
+
       if (seconds <= 0) { clearInterval(timerInterval); handler(); }
+
     }, 1000);
+
   };
+
+
 
   const calculateSimilarity = (s1, s2) => {
+
     let l = s1.length > s2.length ? s1 : s2;
+
     let s = s1.length > s2.length ? s2 : s1;
+
     if (l.length === 0) return 100.0;
+
     return ((l.length - editDistance(l, s)) / l.length) * 100;
+
   };
+
+
 
   const editDistance = (s1, s2) => {
+
       const costs = [];
+
       for (let i = 0; i <= s1.length; i++) {
+
           let lastValue = i;
+
           for (let j = 0; j <= s2.length; j++) {
+
               if (i === 0) costs[j] = j;
+
               else if (j > 0) {
+
                   let newValue = costs[j - 1];
+
                   if (s1.charAt(i - 1) !== s2.charAt(j - 1)) newValue = Math.min(Math.min(newValue, lastValue), costs[j]) + 1;
+
                   costs[j - 1] = lastValue; lastValue = newValue;
+
               }
+
           }
+
           if (i > 0) costs[s2.length] = lastValue;
+
       }
+
       return costs[s2.length];
+
   };
 
+
+
   // --- ฟังก์ชันใหม่สำหรับ JSONP ---
+
 function callGoogleApi(action, data, callbackFunction) {
+
     const callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
+
     
+
     // URL ของคุณ (ต้องเป็น URL ล่าสุดที่ Deploy แล้ว)
+
     let url = 'https://script.google.com/macros/s/AKfycbxo7s02cpN-FQaLSDnQCROBpEh9pTKri3vmL6Dxz99xMZ7h0GEAUqpWUu2mTZ9g_gM_VQ/exec';
+
     url += '?action=' + action + '&callback=' + callbackName;
+
     
+
     // เพิ่ม Data เข้าไปใน URL (สำหรับ GET Request)
+
     for (let key in data) {
+
         url += '&' + key + '=' + encodeURIComponent(data[key]);
+
     }
 
+
+
     const script = document.createElement('script');
+
     
+
     window[callbackName] = function(response) {
+
         callbackFunction(response); // ส่งข้อมูลที่ได้กลับไป
+
         delete window[callbackName];
+
         document.body.removeChild(script);
+
     };
+
     
+
     script.src = url;
+
     document.body.appendChild(script);
+
 }
 
+
+
 // --- ตัวอย่างการปรับฟังก์ชัน login ของคุณให้ใช้ callGoogleApi ---
+
 async function login() {
+
     const empId = document.getElementById('employee-id-input').value.trim();
+
     if (!empId) { showPopup('ผิดพลาด', 'กรุณาใส่รหัสพนักงาน'); return; }
+
     
+
     showSpinner();
+
     
+
     // เรียกใช้ฟังก์ชันใหม่แทน fetch
+
     callGoogleApi('getUserData', { empId: empId }, (user) => {
+
         hideSpinner();
+
         if (user && Object.keys(user).length > 0) {
+
             currentUser = user;
+
             sessionStorage.setItem('currentUser', JSON.stringify(user));
+
             navigateTo('main-menu-page');
+
         } else {
+
             showPopup('ล็อกอินไม่สำเร็จ', 'ไม่พบรหัสพนักงานนี้');
+
         }
+
     });
+
 }
+
 </script>
 
 </body>
