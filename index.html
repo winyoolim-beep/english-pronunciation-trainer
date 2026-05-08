@@ -572,7 +572,7 @@
   /**
    * แก้ไข: ตรวจสอบเพียงว่ามีประวัติการทำแล้วหรือยัง (ไม่สนคะแนน) เพื่อปลดล็อกบทถัดไป
    */
-async function checkLessonLocks() {
+
 function checkLessonLocks() {
     showSpinner();
   const baseUrl = 'https://script.google.com/macros/s/AKfycbxo7s02cpN-FQaLSDnQCROBpEh9pTKri3vmL6Dxz99xMZ7h0GEAUqpWUu2mTZ9g_gM_VQ/exec';
@@ -1162,13 +1162,10 @@ function callGoogleApi(action, data, callbackFunction) {
 }
 
 // --- ตัวอย่างการปรับฟังก์ชัน login ของคุณให้ใช้ callGoogleApi ---
-async function login() {
+function login() {
     const empId = document.getElementById('employee-id-input').value.trim();
     if (!empId) { showPopup('ผิดพลาด', 'กรุณาใส่รหัสพนักงาน'); return; }
-    
     showSpinner();
-    
-    // เรียกใช้ฟังก์ชันใหม่แทน fetch
     callGoogleApi('getUserData', { empId: empId }, (user) => {
         hideSpinner();
         if (user && Object.keys(user).length > 0) {
@@ -1179,7 +1176,7 @@ async function login() {
             showPopup('ล็อกอินไม่สำเร็จ', 'ไม่พบรหัสพนักงานนี้');
         }
     });
-}
+  }
 </script>
 
 </body>
